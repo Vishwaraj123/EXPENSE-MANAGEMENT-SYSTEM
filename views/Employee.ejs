@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+</head>
+<body>
+    <h1>Welcome <%= employee.name %> (Employee)</h1>
+    <h2>Profile</h2>
+
+    <p>Name: <%= employee.name %></p>
+    <p>Username: <%= employee.username %></p>
+    <p>Designation: Employee </p>
+    <p>Department: <%= employee.department %></p>
+    
+    <h2>Add Expense</h2>
+    <form action="/employee/addExpense" method="POST">
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category"><br><br>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount"><br><br>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Expenses for <%= employee.name %></h2>
+    <table id="expenses-table" border="1px">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Action by Manager</th>
+          <th>Action by Admin</th>
+          <th>Action by Director</th>
+        </tr>
+      </thead>
+      <tbody id="expenses-list">
+        <!-- expenses will be displayed here -->
+      </tbody>
+    </table>
+
+    <a href="/logout">Logout</a>
+
+    <script>
+      // Make an AJAX request to the displayExpenses route
+      fetch('/employee/displayExpense')
+       .then(response => response.json())
+       .then(expenses => {
+          const expensesList = document.getElementById('expenses-list');
+          expenses.forEach(expense => {
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML = `
+              <td>${expense.category}</td>
+              <td>${expense.amount}</td>
+              <td>${expense.date}</td>
+              <td>${expense.ActionByManager}</td>
+              <td>${expense.ActionByAdmin}</td>
+              <td>${expense.ActionByDirector}</td>
+            `;
+            expensesList.appendChild(tableRow);
+          });
+        })
+       .catch(error => console.error(error));
+    </script>
+</body>
+</html>

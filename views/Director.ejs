@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Director Dashboard</title>
+</head>
+
+<body>
+  <h1>Welcome <%= director.name %> (Director)</h1>
+  <h2>Director Dashboard</h2>
+  <h3>Profile</h3>
+
+  <p>Name: <%= director.name %>
+  </p>
+  <p>Username: <%= director.username %>
+  </p>
+
+  <h3>Employees</h3>
+
+  <table id="employees-table" border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Department</th>
+        <th colspan="2">Action</th>
+      </tr>
+    </thead>
+    <tbody id="employees-list">
+      <!-- employees will be displayed here -->
+    </tbody>
+  </table>
+
+  <h4>Employee Expenses</h4>
+
+  <table id="expenses-table" border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Action by Director</th>
+      </tr>
+    </thead>
+    <tbody id="employee-expenses-list">
+      <!-- expenses will be displayed here -->
+    </tbody>
+  </table>
+  <h3>Managers</h3>
+
+  <table id="managers-table" border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Department</th>
+        <th colspan="2">Action</th>
+      </tr>
+    </thead>
+    <tbody id="managers-list">
+      <!-- managers will be displayed here -->
+    </tbody>
+  </table>
+
+  <h4>Manager expenses</h4>
+
+  <table id="manager-expenses-table" border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Action By Director</th>
+      </tr>
+    </thead>
+    <tbody id="manager-expenses-list">
+      <!-- expenses will be displayed here -->
+    </tbody>
+  </table>
+
+  <h4>Add Manager</h4>
+
+  <form id="add-manager-form" action="/director/createManager" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required />
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+    <label for="department">Department:</label>
+    <select name="department" id="department">
+      <option value="sales">Sales</option>
+      <option value="HR">HR</option>
+      <option value="Finance">Finance</option>
+    </select>
+    <input type="submit" value="Add Manager" />
+  </form>
+
+  <h3>Admins</h3>
+
+  <table id="admins-table" border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Department</th>
+        <th colspan="2">Action</th>
+      </tr>
+    </thead>
+    <tbody id="admins-list">
+      <!-- admins will be displayed here -->
+    </tbody>
+  </table>
+  <h4>Admin expenses</h4>
+
+  <table id="admin-expenses-table" border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Action by Director</th>
+      </tr>
+    </thead>
+    <tbody id="admin-expenses-list">
+      <!-- expenses will be displayed here -->
+    </tbody>
+  </table>
+
+  <h4>Add Admin</h4>
+
+  <form id="add-admin-form" action="/director/createAdmin" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required />
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+    <label for="department">Department:</label>
+    <input type="text" id="department" name="department" required />
+    <input type="submit" value="Add Admin" />
+  </form>
+
+  <a href="/logout">Logout</a>
+
+  <script>
+    fetch("/director/displayEmployees")
+      .then((response) => response.json())
+      .then((employees) => {
+        const expensesList = document.getElementById("employees-list");
+        employees.forEach((employee) => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+              <td>${employee.name}</td>
+              <td>${employee.username}</td>
+              <td>${employee.department}</td>
+              <td><a href="/director/getEditUser/employee/${employee._id}">Edit</a></td>
+              <td><a href="/director/employees/${employee._id}">Delete</a></td>
+            `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch((error) => console.error(error));
+
+    fetch("/director/displayManagers")
+      .then((response) => response.json())
+      .then((employees) => {
+        const expensesList = document.getElementById("managers-list");
+        employees.forEach((employee) => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+              <td>${employee.name}</td>
+              <td>${employee.username}</td>
+              <td>${employee.department}</td>
+              <td><a href="/director/getEditUser/manager/${employee._id}">Edit</a></td>
+              <td><a href="/director/managers/${employee._id}">Delete</a></td>
+            `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch((error) => console.error(error));
+
+    fetch("/director/displayAdmins")
+      .then((response) => response.json())
+      .then((employees) => {
+        const expensesList = document.getElementById("admins-list");
+        employees.forEach((employee) => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+              <td>${employee.name}</td>
+              <td>${employee.username}</td>
+              <td>${employee.department}</td>
+              <td><a href="/director/editAdmin/${employee._id}">Edit</a></td>
+              <td><a href="/director/admins/${employee._id}">Delete</a></td>
+            `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch((error) => console.error(error));
+    fetch("/director/displayEmployeeExpenses")
+      .then((response) => response.json())
+      .then((employeeExpenses) => {
+        // console.log(employeeExpenses);
+        const expensesList = document.getElementById(
+          "employee-expenses-list"
+        );
+        employeeExpenses.forEach((expense) => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+        <td>${expense.employeeName}</td>
+        <td>${expense.category}</td>
+        <td>${expense.amount > 100000 ? (expense.amount +" (Please approve) ") : expense.amount}</td>
+        <td>${expense.date}</td>
+        ${expense.ActionByDirector === "Pending"
+              ? `<td>
+            <form action="/director/approveExpense/${expense.id}" method="POST">
+              <input type="hidden" name="expenseId" value="${expense.id}">
+              <input type="number" name="partialAmount" placeholder="Amount">
+              <button type="submit">Approve</button>
+            </form>
+            <a href="/director/rejectExpense/${expense.id}">Reject</a>
+          </td>`
+              : `<td>${expense.ActionByDirector}</td>`
+            }
+      `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch((error) =>
+        console.error("Error fetching employee expenses:", error)
+      );
+
+    fetch("/director/displayManagerExpenses")
+      .then((response) => response.json())
+      .then((managerExpenses) => {
+        // console.log(managerExpenses);
+        
+        const expensesList = document.getElementById("manager-expenses-list");
+        managerExpenses.forEach((expense) => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+        <td>${expense.employeeName}</td>
+        <td>${expense.category}</td>
+        <td>${expense.amount > 100000 ? (expense.amount +" (Please approve) ") : expense.amount}</td>
+        <td>${expense.date}</td>
+        ${expense.ActionByDirector === "Pending"
+              ? `<td>
+            <form action="/director/approveExpense/${expense.id}" method="POST">
+              <input type="hidden" name="expenseId" value="${expense.id}">
+              <input type="number" name="partialAmount" placeholder="Amount">
+              <button type="submit">Approve</button>
+            </form>
+            <a href="/director/rejectExpense/${expense.id}">Reject</a>
+          </td>`
+              : `<td>${expense.ActionByDirector}</td>`
+            }
+      `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch((error) => console.error(error));
+
+    fetch("/director/displayAdminExpenses")
+      .then((response) => response.json())
+      .then((adminExpenses) => {
+        // console.log(adminExpenses);
+
+        const expensesList = document.getElementById("admin-expenses-list");
+        adminExpenses.forEach((expense) => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+              <td>${expense.employeeName}</td>
+              <td>${expense.category}</td>
+              <td>${expense.amount}</td>
+              <td>${expense.date}</td>
+              ${expense.ActionByDirector === "Pending"
+              ? `
+                  <td>
+                    <a href="/director/approveExpense/${expense.id}">Approve</a>
+                    <a href="/director/rejectExpense/${expense.id}">Reject</a>
+                  </td>`
+              : `<td>${expense.ActionByDirector}</td>`
+            }
+            `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch((error) => console.error(error));
+  </script>
+</body>
+
+</html>

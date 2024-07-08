@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manager Dashboard</title>
+</head>
+<body>
+  <h1>Welcome <%= manager.name %> (Manager)</h1>
+  <h2>Profile</h2>
+  <p>Name: <%= manager.name %></p>
+  <p>Username: <%= manager.username %></p>
+  <p>Designation: Manager</p>
+  <p>Department: <%= manager.department %></p>
+
+  <% if (manager.department === 'HR') { %>
+  <h2>Add Employee</h2>
+  <form action="/manager/addEmployee" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" /><br /><br />
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" /><br /><br />
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" /><br /><br />
+    <label for="department">Department:</label>
+    <select id="department" name="department">
+      <option value="HR">HR</option>
+      <option value="Finance">Finance</option>
+      <option value="Marketing">Sales</option>
+      <!-- add more departments as needed -->
+    </select><br /><br />
+    <input type="submit" value="Add Employee" />
+  </form>
+  <% } %>
+
+  <h2>Add Expense</h2>
+  <form action="/manager/addExpense" method="POST">
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" /><br /><br />
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" name="amount" /><br /><br />
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" /><br /><br />
+    <input type="submit" value="Submit" />
+  </form>
+
+  <h2>Your Expenses</h2>
+  <table border="1px">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Action By Admin</th>
+        <th>Action By Director</th>
+      </tr>
+    </thead>
+    <tbody id="expenses-list">
+      <!-- expenses will be displayed here -->
+    </tbody>
+  </table>
+
+  <h2>Employee Expenses</h2>
+  <table border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Action by Manager</th>
+        <th>Action by Admin</th>
+        <th>Action by Director</th>
+      </tr>
+    </thead>
+    <tbody id="employee-expenses-list"></tbody>
+  </table>
+
+  <% if (manager.department === 'Finance') { %>
+  <h2>Employee Expenses to be Paid</h2>
+  <table border="1px">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Designation</th>
+        <th>Department</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Approved Amount</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="manager-expenses-list">
+      <!-- expenses will be displayed here -->
+      <% finance.forEach(function(expense) { %>
+        <% if (expense.ActionByDirector != 'Rejected') { %>
+        <% if ((expense.designation === 'Employee' && expense.ActionByManager === 'Approved' && expense.ActionByAdmin === 'Approved') || (expense.designation == 'Employee' && expense.amount >= 100000 && expense.ActionByDirector == 'Approved') || (expense.designation == 'Employee' && expense.amount >= 10000 && expense.ActionByAdmin == 'Approved' ) || (expense.designation === 'Employee' && expense.ActionByManager === 'Partially Approved')) { %>
+          <tr>
+            <td><%= expense.name %></td>
+            <td><%= expense.designation %></td>
+            <td><%= expense.department %></td>
+            <td><%= expense.category %></td>
+            <td><%= expense.amount %></td>
+            <td><%= expense.ApprovedAmount %></td>
+            <td><%= expense.date %></td>
+            <% if (expense.Finance !== 'Pending' && expense.Finance !== undefined) { %>
+              <td><%= expense.Finance %></td>
+            <% } else { %>
+              <td>
+                <form action="/manager/payExpense/<%= expense._id %>" method="post">
+                  <select name="modeOfPayment" id="modeOfPayment">
+                    <option value="cash">Cash</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                  </select>
+                  <button type="submit">Pay</button>
+                </form>
+              </td>
+            <% } %>
+          </tr>
+        <% } else if ((expense.designation === 'Manager' && expense.ActionByAdmin === 'Approved') || (expense.designation == 'Manager' && expense.amount >= 100000 && expense.ActionByDirector == 'Approved') || (expense.designation === 'Manager' && expense.ActionByAdmin === 'Partially Approved')) { %>
+          <tr>
+            <td><%= expense.name %></td>
+            <td><%= expense.designation %></td>
+            <td><%= expense.department %></td>
+            <td><%= expense.category %></td>
+            <td><%= expense.amount %></td>
+            <td><%= expense.ApprovedAmount %></td>
+            <td><%= expense.date %></td>
+            <% if (expense.Finance !== 'Pending' && expense.Finance !== undefined) { %>
+              <td><%= expense.Finance %></td>
+            <% } else { %>
+              <td>
+                <form action="/manager/payExpense/<%= expense._id %>" method="post">
+                  <select name="modeOfPayment" id="modeOfPayment">
+                    <option value="cash">Cash</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                  </select>
+                  <button type="submit">Pay</button>
+                </form>
+              </td>
+            <% } %>
+          </tr>
+        <% } else if ((expense.designation === 'Admin' && expense.ActionByDirector === 'Approved') || (expense.designation === 'Admin' && expense.ActionByDirector === 'Partially Approved')) { %>
+          <tr>
+            <td><%= expense.name %></td>
+            <td><%= expense.designation %></td>
+            <td><%= expense.department %></td>
+            <td><%= expense.category %></td>
+            <td><%= expense.amount %></td>
+            <td><%= expense.ApprovedAmount %></td>
+            <td><%= expense.date %></td>
+            <% if (expense.Finance !== 'Pending' && expense.Finance !== undefined) { %>
+              <td><%= expense.Finance %></td>
+            <% } else { %>
+              <td>
+                <form action="/manager/payExpense/<%= expense._id %>" method="post">
+                  <select name="modeOfPayment" id="modeOfPayment">
+                    <option value="cash">Cash</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                  </select>
+                  <button type="submit">Pay</button>
+                </form>
+              </td>
+            <% } %>
+          </tr>
+        <% } %>
+      <% } %>
+      <% }); %>
+    </tbody>
+    
+  </table>
+  <% } %>
+
+  <script>
+    // Make an AJAX request to the displayExpenses route
+    fetch("/manager/displayExpense")
+      .then(response => response.json())
+      .then(expenses => {
+        const expensesList = document.getElementById("expenses-list");
+        expenses.forEach(expense => {
+          const tableRow = document.createElement("tr");
+          tableRow.innerHTML = `
+            <td>${expense.category}</td>
+            <td>${expense.amount}</td>
+            <td>${expense.date}</td>
+            <td>${expense.ActionByAdmin}</td>
+            <td>${expense.ActionByDirector}</td>
+          `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    fetch("/manager/displayEmployeeExpenses")
+      .then(response => response.json())
+      .then(employeeExpenses => {
+        console.log(employeeExpenses);
+        const expensesList = document.getElementById("employee-expenses-list");
+        employeeExpenses.forEach(expense => {
+          const tableRow = document.createElement("tr");
+          let statusHtml = "";
+          if (expense.ActionByManager === "Pending") {
+            if(expense.amount > 10000){
+              statusHtml = `cant Approve`
+            }else{
+            statusHtml = `
+              <form action="/manager/${expense.id}/approvePartial" method="POST">
+                <label for="amount">Approve Amount</label>
+                <input type="number" name="amount" min="1" max="${expense.amount}" required>
+                <button type="submit">Approve Partially</button>
+              </form>
+              <a href="/manager/${expense.id}/approveExpense">Approve</a>
+              <a href="/manager/${expense.id}/rejectExpense">Reject</a>
+            `;}
+          } else {
+            statusHtml = expense.ActionByManager;
+          }
+          tableRow.innerHTML = `
+            <td>${expense.employeeName}</td>
+            <td>${expense.category}</td>
+            <td>${expense.amount}</td>
+            <td>${expense.date}</td>
+            <td>${statusHtml}</td>
+            <td>${expense.ActionByAdmin}</td>
+            <td>${expense.ActionByDirector}</td>
+          `;
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  </script>
+
+  <a href="/logout">Logout</a>
+</body>
+</html>

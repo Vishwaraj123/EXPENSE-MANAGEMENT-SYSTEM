@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    h2 {
+      font-size: 18px;
+    }
+    h3 {
+      font-size: 14px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="text"], input[type="number"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    .expenses-header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    .expenses-list {
+      margin-bottom: 20px;
+    }
+    </style>
+</head>
+  <body>
+    <h1 class="welcome-header">Welcome <%= admin.name %> (Admin)</h1>
+    <a href="/logout" class="logout-link">Logout</a>
+    <h2 class="dashboard-header">Admin Dashboard</h2>
+    <h3 class="profile-header">Profile</h3>
+
+    <p class="profile-info">Name: <%= admin.name %></p>
+    <p class="profile-info">Username: <%= admin.username %></p>
+    <p class="profile-info">Department: <%= admin.department %></p>
+
+    <h3 class="add-expense-header">Add Expense</h3>
+    <form action="/admin/addExpense" method="POST">
+        <label for="category" class="form-label">Category:</label>
+        <input type="text" id="category" name="category" class="form-input"><br><br>
+        <label for="amount" class="form-label">Amount:</label>
+        <input type="number" id="amount" name="amount" class="form-input"><br><br>
+        <label for="date" class="form-label">Date:</label>
+        <input type="date" id="date" name="date" class="form-input"><br><br>
+        <input type="submit" value="Submit" class="form-submit">
+    </form>
+
+    <h3 class="expenses-header">Your Expenses</h3>
+    <table id="expenses-table" border="1px" class="expenses-table">
+      <thead>
+        <tr>
+          <th class="table-header">Category</th>
+          <th class="table-header">Amount</th>
+          <th class="table-header">Date</th>
+          <th class="table-header">Action by Director</th>
+        </tr>
+      </thead>
+      <tbody id="expenses-list" class="expenses-list">
+        <!-- expenses will be displayed here -->
+      </tbody>
+    </table>
+
+    <h3 class="expenses-header">Manager Expenses</h3>
+    <table id="manager-expenses-table" border="1px" class="expenses-table">
+      <thead>
+        <tr>
+          <th class="table-header">Name</th>
+          <th class="table-header">Category</th>
+          <th class="table-header">Amount</th>
+          <th class="table-header">Date</th>
+          <th class="table-header">Action by Admin</th>
+        </tr>
+      </thead>
+      <tbody id="manager-expenses-list" class="expenses-list">
+        <!-- expenses will be displayed here -->
+      </tbody>
+    </table>
+
+    <h3 class="expenses-header">Employee Expenses</h3>
+    <table id="employee-expenses-table" border="1px" class="expenses-table">
+      <thead>
+        <tr>
+          <th class="table-header">Name</th>
+          <th class="table-header">Category</th>
+          <th class="table-header">Amount</th>
+          <th class="table-header">Date</th>
+          <th class="table-header">Action by Manager</th>
+          <th class="table-header">Action by Admin</th>
+        </tr>
+      </thead>
+      <tbody id="employee-expenses-list" class="expenses-list">
+        <!-- expenses will be displayed here -->
+      </tbody>
+    </table>
+    
+
+    <script>
+        fetch('/admin/displayExpense')
+       .then(response => response.json())
+       .then(expenses => {
+          const expensesList = document.getElementById('expenses-list');
+          expenses.forEach(expense => {
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML = `
+              <td>${expense.category}</td>
+              <td>${expense.amount}</td>
+              <td>${expense.date}</td>
+              <td>${expense.ActionByDirector}</td>
+            `;
+            expensesList.appendChild(tableRow);
+          });
+        })
+       .catch(error => console.error(error));
+
+       fetch('/admin/displayManagerExpenses')
+  .then(response => response.json())
+  .then(expenses => {
+    const managerExpensesList = document.getElementById('manager-expenses-list');
+    expenses.forEach(expense => {
+      const tableRow = document.createElement('tr');
+      tableRow.innerHTML = `
+        <td>${expense.employeeName}</td>
+        <td>${expense.category}</td>
+        <td>${expense.amount}</td>
+        <td>${expense.date}</td>
+        ${expense.ActionByAdmin === "Pending" ? 
+          `${expense.amount <= 100000 ? 
+            `<td> <form id="approve-partial-form" action="/admin/${expense.id}/approvePartial" method="POST">
+              <label for="amount">Approve Amount</label>
+              <input type="number" name="amount" min="1" max="${expense.amount}" required>
+              <button type="submit">Approve Partially</button>
+            </form>
+            <a href="/admin/${expense.id}/approveExpense">Approve</a>
+            <a href="/admin/${expense.id}/rejectExpense">Reject</a></td>` 
+            : `<td>You can't approve this expense since its amount is greater than 100000</td>`
+          }` 
+          : `<td>${expense.ActionByAdmin}</td>`
+        }
+      `;
+
+      // Add event listener to the form
+      const form = tableRow.querySelector('#approve-partial-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault(); // prevent default form submission
+        // You can add additional logic here if needed
+        form.submit(); // submit the form programmatically
+      });
+
+      managerExpensesList.appendChild(tableRow);
+    });
+  })
+  .catch(error => console.error(error));
+        fetch('/admin/displayEmployeeExpenses')
+       .then(response => response.json())
+       .then(expenses => {
+          const employeeExpensesList = document.getElementById('employee-expenses-list');
+          expenses.forEach(expense => {
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML = `
+              <td>${expense.employeeName}</td>
+              <td>${expense.category}</td>
+              <td>${expense.amount}</td>
+              <td>${expense.date}</td>
+              <td>${expense.ActionByManager}</td>
+              ${expense.ActionByAdmin === "Pending" ? 
+                `${expense.amount > 100000 ? 
+                  `<td>You can't approve this expense since its amount is greater than 100000</td>`
+                  : `<td><a href=${`/admin/${expense.id}/approveExpense`}>Approve</a>
+                  <a href=${`/admin/${expense.id}/rejectExpense`}>Reject</a></td>`}`
+                : `<td>${expense.ActionByAdmin}</td>`
+              }
+            `;
+            employeeExpensesList.appendChild(tableRow);
+          });
+        })
+       .catch(error => console.error(error));
+    </script>
+</body>
+</html>
