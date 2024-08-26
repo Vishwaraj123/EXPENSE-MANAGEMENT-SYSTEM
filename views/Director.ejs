@@ -1,297 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Director Dashboard</title>
+    <style>
+      /* Reset some default styles */
+      body,
+      h1,
+      h2,
+      h3,
+      p,
+      table,
+      form {
+        margin: 0;
+        padding: 0;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Director Dashboard</title>
-</head>
+      body {
+        font-family: Arial, sans-serif;
+        color: #333;
+        background-color: #f4f4f4;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
 
-<body>
-  <h1>Welcome <%= director.name %> (Director)</h1>
-  <h2>Director Dashboard</h2>
-  <h3>Profile</h3>
+      .wrapper {
+        display: flex;
+        width: 100%;
+      }
 
-  <p>Name: <%= director.name %>
-  </p>
-  <p>Username: <%= director.username %>
-  </p>
+      .vertical_wrap {
+        width: 250px;
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        box-sizing: border-box;
+        height: 100%;
+        position: relative;
+      }
 
-  <h3>Employees</h3>
+      .profile_info {
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-  <table id="employees-table" border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Department</th>
-        <th colspan="2">Action</th>
-      </tr>
-    </thead>
-    <tbody id="employees-list">
-      <!-- employees will be displayed here -->
-    </tbody>
-  </table>
+      .profile_info .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
 
-  <h4>Employee Expenses</h4>
+      .menu {
+        list-style: none;
+        padding: 0;
+      }
 
-  <table id="expenses-table" border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Action by Director</th>
-      </tr>
-    </thead>
-    <tbody id="employee-expenses-list">
-      <!-- expenses will be displayed here -->
-    </tbody>
-  </table>
-  <h3>Managers</h3>
+      .menu li {
+        margin-bottom: 15px;
+      }
 
-  <table id="managers-table" border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Department</th>
-        <th colspan="2">Action</th>
-      </tr>
-    </thead>
-    <tbody id="managers-list">
-      <!-- managers will be displayed here -->
-    </tbody>
-  </table>
+      .menu li a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
 
-  <h4>Manager expenses</h4>
+      .menu li a.active {
+        background-color: #444;
+      }
 
-  <table id="manager-expenses-table" border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Action By Director</th>
-      </tr>
-    </thead>
-    <tbody id="manager-expenses-list">
-      <!-- expenses will be displayed here -->
-    </tbody>
-  </table>
+      .menu li a:hover {
+        background-color: #555;
+      }
 
-  <h4>Add Manager</h4>
+      .menu .icon {
+        margin-right: 10px;
+      }
 
-  <form id="add-manager-form" action="/director/createManager" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required />
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-    <label for="department">Department:</label>
-    <select name="department" id="department">
-      <option value="sales">Sales</option>
-      <option value="HR">HR</option>
-      <option value="Finance">Finance</option>
-    </select>
-    <input type="submit" value="Add Manager" />
-  </form>
+      .menu .text {
+        font-size: 16px;
+      }
 
-  <h3>Admins</h3>
+      .main_container {
+        flex: 1;
+        background-color: #fff;
+        padding: 20px;
+        overflow-y: auto;
+        box-sizing: border-box;
+      }
 
-  <table id="admins-table" border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Department</th>
-        <th colspan="2">Action</th>
-      </tr>
-    </thead>
-    <tbody id="admins-list">
-      <!-- admins will be displayed here -->
-    </tbody>
-  </table>
-  <h4>Admin expenses</h4>
+      .top_bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        background-color: #f9f9f9;
+      }
 
-  <table id="admin-expenses-table" border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Action by Director</th>
-      </tr>
-    </thead>
-    <tbody id="admin-expenses-list">
-      <!-- expenses will be displayed here -->
-    </tbody>
-  </table>
+      .hamburger {
+        font-size: 24px;
+        cursor: pointer;
+      }
 
-  <h4>Add Admin</h4>
+      .logo {
+        font-size: 20px;
+        font-weight: bold;
+      }
 
-  <form id="add-admin-form" action="/director/createAdmin" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required />
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-    <label for="department">Department:</label>
-    <input type="text" id="department" name="department" required />
-    <input type="submit" value="Add Admin" />
-  </form>
+      .section {
+        display: none;
+      }
 
-  <a href="/logout">Logout</a>
+      .section.active {
+        display: block;
+      }
 
-  <script>
-    fetch("/director/displayEmployees")
-      .then((response) => response.json())
-      .then((employees) => {
-        const expensesList = document.getElementById("employees-list");
-        employees.forEach((employee) => {
-          const tableRow = document.createElement("tr");
-          tableRow.innerHTML = `
-              <td>${employee.name}</td>
-              <td>${employee.username}</td>
-              <td>${employee.department}</td>
-              <td><a href="/director/getEditUser/employee/${employee._id}">Edit</a></td>
-              <td><a href="/director/employees/${employee._id}">Delete</a></td>
-            `;
-          expensesList.appendChild(tableRow);
+      h1,
+      h2,
+      h3 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      h3 {
+        font-size: 14px;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      input[type="number"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      input[type="submit"],
+      button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover,
+      button:hover {
+        background-color: #555;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      table th,
+      table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+
+      table th {
+        background-color: #f4f4f4;
+      }
+
+      form select {
+        width: 100%; /* Full width */
+        padding: 10px; /* Add padding for better spacing */
+        border: 1px solid #ddd; /* Border color */
+        border-radius: 4px; /* Rounded corners */
+        background-color: #fff; /* Background color */
+        font-size: 16px; /* Font size for better readability */
+        color: #333; /* Text color */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: border-color 0.3s, background-color 0.3s; /* Smooth transition for border and background */
+      }
+
+      form select:focus {
+        border-color: #007bff; /* Change border color on focus */
+        background-color: #e9f5ff; /* Light blue background on focus */
+        outline: none; /* Remove default outline */
+      }
+
+      form button {
+        background-color: #28a745;
+      }
+
+      form button:hover {
+        background-color: #218838;
+      }
+
+      .btn.btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+
+      .btn.btn-primary:hover {
+        background-color: #0056b3;
+      }
+
+      @media (max-width: 768px) {
+        .wrapper {
+          flex-direction: column;
+        }
+
+        .vertical_wrap {
+          width: 100%;
+          height: auto;
+        }
+
+        .main_container {
+          padding: 10px;
+        }
+
+        .top_bar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hamburger {
+          margin-bottom: 10px;
+        }
+
+        .menu li a {
+          font-size: 14px;
+        }
+      }
+      /* Style for partial amount input field to fit within the table cell */
+      table input[name="partialAmount"] {
+        width: 80px; /* Adjust width to fit within the table cell */
+        padding: 5px; /* Add padding for better spacing */
+        margin-right: 10px; /* Space between input and button */
+      }
+
+      /* Style for the form within the table cell */
+      table td form {
+        display: inline-block; /* Ensure the form is inline */
+        margin: 0; /* Remove default margin */
+      }
+
+      /* Style for the approve button */
+      table td form button {
+        padding: 5px 10px; /* Add padding for better spacing */
+        background-color: #3dab4f; /* Blue background color */
+        color: #fff; /* White text color */
+        border: none; /* Remove border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        margin-right: 10px; /* Space between buttons */
+      }
+
+      /* Style for the reject link */
+      table td a {
+        padding: 5px 10px; /* Add padding for better spacing */
+        background-color: #dc3545; /* Red background color */
+        color: #fff; /* White text color */
+        border: none; /* Remove border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        text-decoration: none; /* Remove underline from link */
+        display: inline-block; /* Ensure the link is inline */
+        margin-left: 10px; /* Space between buttons */
+      }
+      
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="vertical_wrap">
+        <div class="profile_info">
+          <div class="title">Director Profile</div>
+          <p class="profile-info"><%= director.name %></p>
+        </div>
+        <ul class="menu">
+          <li>
+            <a href="#employees-section" class="active"
+              ><span class="icon">👥</span
+              ><span class="text">Employees</span></a
+            >
+          </li>
+          <li>
+            <a href="#employee-expenses-section"
+              ><span class="icon">💵</span
+              ><span class="text">Employee Expenses</span></a
+            >
+          </li>
+          <li>
+            <a href="#managers-section"
+              ><span class="icon">👨‍💼</span><span class="text">Managers</span></a
+            >
+          </li>
+          <li>
+            <a href="#manager-expenses-section"
+              ><span class="icon">💰</span
+              ><span class="text">Manager Expenses</span></a
+            >
+          </li>
+          <li>
+            <a href="#admins-section"
+              ><span class="icon">👨‍💼</span><span class="text">Admins</span></a
+            >
+          </li>
+          <li>
+            <a href="#admin-expenses-section"
+              ><span class="icon">💰</span
+              ><span class="text">Admin Expenses</span></a
+            >
+          </li>
+          <li>
+            <a href="#add-manager-section"
+              ><span class="icon">➕</span
+              ><span class="text">Add Manager</span></a
+            >
+          </li>
+          <li>
+            <a href="#add-admin-section"
+              ><span class="icon">➕</span
+              ><span class="text">Add Admin</span></a
+            >
+          </li>
+          <li>
+            <a href="/logout"
+              ><span class="icon">🚪</span><span class="text">Logout</span></a
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="main_container">
+        <br><br>
+      <h1>Director Dashboard</h1>
+      <br><br>
+
+        <section id="employees-section" class="section active">
+          <h2>Employees</h2>
+          <table id="employees-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Department</th>
+                <th colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody id="employees-list">
+              <!-- Employees will be displayed here -->
+            </tbody>
+          </table>
+        </section>
+
+        <section id="employee-expenses-section" class="section">
+          <h2>Employee Expenses</h2>
+          <table id="expenses-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action by Director</th>
+              </tr>
+            </thead>
+            <tbody id="employee-expenses-list">
+              <!-- Employee expenses will be displayed here -->
+            </tbody>
+          </table>
+        </section>
+
+        <section id="managers-section" class="section">
+          <h2>Managers</h2>
+          <table id="managers-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Department</th>
+                <th colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody id="managers-list">
+              <!-- Managers will be displayed here -->
+            </tbody>
+          </table>
+        </section>
+
+        <section id="manager-expenses-section" class="section">
+          <h2>Manager Expenses</h2>
+          <table id="manager-expenses-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action By Director</th>
+              </tr>
+            </thead>
+            <tbody id="manager-expenses-list">
+              <!-- Manager expenses will be displayed here -->
+            </tbody>
+          </table>
+        </section>
+        <section id="admins-section" class="section">
+          <h2>Admins</h2>
+          <table id="admins-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Department</th>
+                <th colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admins-list">
+              <!-- Admins will be displayed here -->
+            </tbody>
+          </table>
+        </section>
+
+        <section id="admin-expenses-section" class="section">
+          <h2>Admin Expenses</h2>
+          <table id="admin-expenses-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action By Director</th>
+              </tr>
+            </thead>
+            <tbody id="admin-expenses-list">
+              <!-- Admin expenses will be displayed here -->
+            </tbody>
+          </table>
+        </section>
+
+        <section id="add-manager-section" class="section">
+          <h2>Add Manager</h2>
+          <form
+            id="add-manager-form"
+            action="/director/createManager"
+            method="post"
+          >
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required />
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+            <label for="department">Department:</label>
+            <select name="department" id="department">
+              <option value="sales">Sales</option>
+              <option value="HR">HR</option>
+              <option value="Finance">Finance</option>
+            </select>
+            <br />
+            <input type="submit" value="Add Manager" />
+          </form>
+        </section>
+
+        <section id="add-admin-section" class="section">
+          <h2>Add Admin</h2>
+          <form
+            id="add-admin-form"
+            action="/director/createAdmin"
+            method="post"
+          >
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required />
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+            <label for="department">Department:</label>
+            <select name="department" id="department">
+              <option value="sales">Sales</option>
+              <option value="HR">HR</option>
+              <option value="Finance">Finance</option>
+            </select>
+            <br />
+            <input type="submit" value="Add Admin" />
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".menu li a").forEach((link) => {
+        link.addEventListener("click", function () {
+          document
+            .querySelectorAll(".section")
+            .forEach((section) => section.classList.remove("active"));
+          document
+            .querySelector(`#${this.getAttribute("href").substring(1)}`)
+            .classList.add("active");
+          document
+            .querySelectorAll(".menu li a")
+            .forEach((a) => a.classList.remove("active"));
+          this.classList.add("active");
         });
-      })
-      .catch((error) => console.error(error));
+      });
 
-    fetch("/director/displayManagers")
-      .then((response) => response.json())
-      .then((employees) => {
-        const expensesList = document.getElementById("managers-list");
-        employees.forEach((employee) => {
-          const tableRow = document.createElement("tr");
-          tableRow.innerHTML = `
-              <td>${employee.name}</td>
-              <td>${employee.username}</td>
-              <td>${employee.department}</td>
-              <td><a href="/director/getEditUser/manager/${employee._id}">Edit</a></td>
-              <td><a href="/director/managers/${employee._id}">Delete</a></td>
-            `;
-          expensesList.appendChild(tableRow);
-        });
-      })
-      .catch((error) => console.error(error));
+      fetch("/director/displayEmployees")
+        .then((response) => response.json())
+        .then((employees) => {
+          const employeesList = document.getElementById("employees-list");
+          employees.forEach((employee) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+            <td>${employee.name}</td>
+            <td>${employee.username}</td>
+            <td>${employee.department}</td>
+            <td><a href="/director/getEditUser/employee/${employee._id}" style="background-color:#0d6efd;">Edit</a></td>
+            <td><a href="/director/employees/${employee._id}">Delete</a></td>
+          `;
+            employeesList.appendChild(tableRow);
+          });
+        })
+        .catch((error) => console.error(error));
 
-    fetch("/director/displayAdmins")
-      .then((response) => response.json())
-      .then((employees) => {
-        const expensesList = document.getElementById("admins-list");
-        employees.forEach((employee) => {
-          const tableRow = document.createElement("tr");
-          tableRow.innerHTML = `
-              <td>${employee.name}</td>
-              <td>${employee.username}</td>
-              <td>${employee.department}</td>
-              <td><a href="/director/editAdmin/${employee._id}">Edit</a></td>
-              <td><a href="/director/admins/${employee._id}">Delete</a></td>
-            `;
-          expensesList.appendChild(tableRow);
-        });
-      })
-      .catch((error) => console.error(error));
-    fetch("/director/displayEmployeeExpenses")
-      .then((response) => response.json())
-      .then((employeeExpenses) => {
-        // console.log(employeeExpenses);
-        const expensesList = document.getElementById(
-          "employee-expenses-list"
+      fetch("/director/displayManagers")
+        .then((response) => response.json())
+        .then((managers) => {
+          const managersList = document.getElementById("managers-list");
+          managers.forEach((manager) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+            <td>${manager.name}</td>
+            <td>${manager.username}</td>
+            <td>${manager.department}</td>
+            <td ><a href="/director/getEditUser/manager/${manager._id}" style="background-color:#0d6efd;">Edit</a></td>
+            <td><a href="/director/managers/${manager._id}">Delete</a></td>
+          `;
+            managersList.appendChild(tableRow);
+          });
+        })
+        .catch((error) => console.error(error));
+
+      fetch("/director/displayAdmins")
+        .then((response) => response.json())
+        .then((admins) => {
+          const adminsList = document.getElementById("admins-list");
+          admins.forEach((admin) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+            <td>${admin.name}</td>
+            <td>${admin.username}</td>
+            <td>${admin.department}</td>
+            <td><a href="/director/getEditUser/admin/${admin._id}" style="background-color:#0d6efd;">Edit</a></td>
+            <td><a href="/director/admins/${admin._id}">Delete</a></td>
+          `;
+            adminsList.appendChild(tableRow);
+          });
+        })
+        .catch((error) => console.error(error));
+
+      fetch("/director/displayEmployeeExpenses")
+        .then((response) => response.json())
+        .then((expenses) => {
+          const expensesList = document.getElementById(
+            "employee-expenses-list"
+          );
+          expenses.forEach((expense) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+            <td>${expense.employeeName}</td>
+            <td>${expense.category}</td>
+            <td>${
+              expense.amount > 100000
+                ? expense.amount + " (Please approve)"
+                : expense.amount
+            }</td>
+            <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
+            ${
+              expense.ActionByDirector === "Pending"
+                ? `<td>
+                  <form action="/director/approveExpense/${expense.id}" method="POST">
+                    <input type="hidden" name="expenseId" value="${expense.id}">
+                    <input type="number" name="partialAmount" placeholder="Amount">
+                    <button type="submit">Approve</button>
+                  </form>
+                  <a href="/director/rejectExpense/${expense.id}">Reject</a>
+                </td>`
+                : `<td>${expense.ActionByDirector}</td>`
+            }
+          `;
+            expensesList.appendChild(tableRow);
+          });
+        })
+        .catch((error) =>
+          console.error("Error fetching employee expenses:", error)
         );
-        employeeExpenses.forEach((expense) => {
-          const tableRow = document.createElement("tr");
-          tableRow.innerHTML = `
-        <td>${expense.employeeName}</td>
-        <td>${expense.category}</td>
-        <td>${expense.amount > 100000 ? (expense.amount +" (Please approve) ") : expense.amount}</td>
-        <td>${expense.date}</td>
-        ${expense.ActionByDirector === "Pending"
-              ? `<td>
-            <form action="/director/approveExpense/${expense.id}" method="POST">
-              <input type="hidden" name="expenseId" value="${expense.id}">
-              <input type="number" name="partialAmount" placeholder="Amount">
-              <button type="submit">Approve</button>
-            </form>
-            <a href="/director/rejectExpense/${expense.id}">Reject</a>
-          </td>`
-              : `<td>${expense.ActionByDirector}</td>`
-            }
-      `;
-          expensesList.appendChild(tableRow);
-        });
-      })
-      .catch((error) =>
-        console.error("Error fetching employee expenses:", error)
-      );
 
-    fetch("/director/displayManagerExpenses")
-      .then((response) => response.json())
-      .then((managerExpenses) => {
-        // console.log(managerExpenses);
+      fetch("/director/displayManagerExpenses")
+        .then((response) => response.json())
+        .then((expenses) => {
+          const expensesList = document.getElementById("manager-expenses-list");
+          expenses.forEach((expense) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+            <td>${expense.employeeName}</td>
+            <td>${expense.category}</td>
+            <td>${
+              expense.amount > 100000
+                ? expense.amount + " (Please approve)"
+                : expense.amount
+            }</td>
+           <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
+            ${
+              expense.ActionByDirector === "Pending"
+                ? `<td>
+                  <form action="/director/approveExpense/${expense.id}" method="POST">
+                    <input type="hidden" name="expenseId" value="${expense.id}">
+                    <input type="number" name="partialAmount" placeholder="Amount">
+                    <button type="submit">Approve</button>
+                  </form>
+                  <a href="/director/rejectExpense/${expense.id}">Reject</a>
+                </td>`
+                : `<td>${expense.ActionByDirector}</td>`
+            }
+          `;
+            expensesList.appendChild(tableRow);
+          });
+        })
+        .catch((error) => console.error(error));
+
+      fetch("/director/displayAdminExpenses")
+        .then((response) => response.json())
+        .then((expenses) => {
+          const expensesList = document.getElementById("admin-expenses-list");
+          expenses.forEach((expense) => {
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `
+            <td>${expense.employeeName}</td>
+            <td>${expense.category}</td>
+            <td>${expense.amount}</td>
+           <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
+            ${
+              expense.ActionByDirector === "Pending"
+                ? `<td>
+                  <a href="/director/approveExpense/${expense.id}" style="background-color:#3dab4f">Approve</a>
+                  <a href="/director/rejectExpense/${expense.id}">Reject</a>
+                </td>`
+                : `<td>${expense.ActionByDirector}</td>`
+            }
+          `;
+            expensesList.appendChild(tableRow);
+          });
+        })
+        .catch((error) => console.error(error));
         
-        const expensesList = document.getElementById("manager-expenses-list");
-        managerExpenses.forEach((expense) => {
-          const tableRow = document.createElement("tr");
-          tableRow.innerHTML = `
-        <td>${expense.employeeName}</td>
-        <td>${expense.category}</td>
-        <td>${expense.amount > 100000 ? (expense.amount +" (Please approve) ") : expense.amount}</td>
-        <td>${expense.date}</td>
-        ${expense.ActionByDirector === "Pending"
-              ? `<td>
-            <form action="/director/approveExpense/${expense.id}" method="POST">
-              <input type="hidden" name="expenseId" value="${expense.id}">
-              <input type="number" name="partialAmount" placeholder="Amount">
-              <button type="submit">Approve</button>
-            </form>
-            <a href="/director/rejectExpense/${expense.id}">Reject</a>
-          </td>`
-              : `<td>${expense.ActionByDirector}</td>`
-            }
-      `;
-          expensesList.appendChild(tableRow);
-        });
-      })
-      .catch((error) => console.error(error));
-
-    fetch("/director/displayAdminExpenses")
-      .then((response) => response.json())
-      .then((adminExpenses) => {
-        // console.log(adminExpenses);
-
-        const expensesList = document.getElementById("admin-expenses-list");
-        adminExpenses.forEach((expense) => {
-          const tableRow = document.createElement("tr");
-          tableRow.innerHTML = `
-              <td>${expense.employeeName}</td>
-              <td>${expense.category}</td>
-              <td>${expense.amount}</td>
-              <td>${expense.date}</td>
-              ${expense.ActionByDirector === "Pending"
-              ? `
-                  <td>
-                    <a href="/director/approveExpense/${expense.id}">Approve</a>
-                    <a href="/director/rejectExpense/${expense.id}">Reject</a>
-                  </td>`
-              : `<td>${expense.ActionByDirector}</td>`
-            }
-            `;
-          expensesList.appendChild(tableRow);
-        });
-      })
-      .catch((error) => console.error(error));
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

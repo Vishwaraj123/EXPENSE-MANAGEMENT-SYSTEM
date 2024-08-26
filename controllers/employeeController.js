@@ -9,7 +9,7 @@ async function addExpense(req, res) {
   
     const { category, amount, date } = req.body;
     const userId = req.session.loggedInUserId;
-    console.log(userId)
+
   
     try {
       const user = await Employee.findById(userId);
@@ -30,10 +30,10 @@ async function addExpense(req, res) {
   
       await newExpense.save();
   
-      return res.send("Expense added successfully.");
+      return res.send(`<script>alert('Expense added successfully.'); window.history.go(-1);</script>`);
     } catch (err) {
       console.log(err);
-      return res.send("Internal server error.");
+      return res.send("<script>alert('Internal server error.'); window.history.go(-1);</script>");
     }
   }
 
@@ -44,13 +44,13 @@ async function addExpense(req, res) {
       const expenses = await Expense.find({ userId: userId });
   
       if (expenses.length === 0) {
-        return res.send("No expenses found for this user.");
+        return res.send("<script>alert('No expenses found for this user.'); window.history.go(-1);</script>");
       }
   
       res.json(expenses);
     } catch (err) {
       console.log(err);
-      return res.send("Internal server error.");
+      return res.send("<script>alert('Internal server error.'); window.history.go(-1);</script>");
     }
   }
 module.exports = { addExpense, displayExpense };

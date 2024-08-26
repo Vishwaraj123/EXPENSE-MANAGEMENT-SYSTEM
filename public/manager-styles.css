@@ -1,0 +1,245 @@
+/* Reset some default styles */
+body, h1, h2, p, table, form {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f4f4f4;
+  }
+  
+  .wrapper {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .wrapper_inner {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .vertical_wrap {
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    position: relative;
+  }
+  
+  .backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+  }
+  
+  .vertical_bar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+  }
+  
+  .profile_info {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile_info .title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .menu {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .menu li {
+    margin-bottom: 15px;
+  }
+  
+  .menu li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .menu li a.active {
+    background-color: #444;
+  }
+  
+  .menu li a:hover {
+    background-color: #555;
+  }
+  
+  .menu .icon {
+    margin-right: 10px;
+  }
+  
+  .menu .text {
+    font-size: 16px;
+  }
+  
+  .main_container {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .top_bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .hamburger {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .logo {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .section {
+    display: none;
+  }
+  
+  .section.active {
+    display: block;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    margin-bottom: 15px;
+  }
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  input[type="submit"],
+  button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover,
+  button:hover {
+    background-color: #555;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  table th,
+  table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #f4f4f4;
+  }
+  
+  form select {
+    width: auto;
+    margin-right: 10px;
+  }
+  
+  form button {
+    background-color: #28a745;
+  }
+  
+  form button:hover {
+    background-color: #218838;
+  }
+  
+  .btn.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  
+  .btn.btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .wrapper {
+      flex-direction: column;
+    }
+  
+    .vertical_wrap {
+      width: 100%;
+      height: auto;
+    }
+  
+    .main_container {
+      padding: 10px;
+    }
+  
+    .top_bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .hamburger {
+      margin-bottom: 10px;
+    }
+  
+    .menu li a {
+      font-size: 14px;
+    }
+  }
+  

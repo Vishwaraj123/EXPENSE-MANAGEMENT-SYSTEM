@@ -1,27 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-</head>
-<body>
-    <form action="/login" method="post">    
-        <label for="Designation">Designation</label>
+    <style>
+      /* Reset some default styles */
+      body,
+      h1,
+      form {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        background-image: url("login_background.jpeg");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      /* Add some basic styling to the login container */
+      .login-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 350px;
+        text-align: center;
+      }
+
+      /* Style the form elements */
+      label {
+        display: block;
+        text-align: left;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      select {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      input[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #555;
+      }
+
+      /* Add some basic styling to the h1 element */
+      h1 {
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        font-weight: normal;
+        color: #666;
+        font-size: 14px;
+      }
+
+      /* Make the select element look a bit nicer */
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M7%206.5L12%2012.5L17%206.5%22%2F%3E%3C%2Fsvg%3E');
+        background-size: 20px 20px;
+        background-position: 95% 50%;
+        background-repeat: no-repeat;
+        padding-right: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>Employee Expense Management System (EEMS)</h1>
+      <h2>Your gateway to efficient expense tracking</h2>
+      <form action="/login" method="post">
+        <label for="designation">Designation</label>
         <select name="designation" id="designation">
-            <option value="Employee">Employee</option>
-            <option value="Manager">Manager</option>
-            <option value="Admin">Admin</option>
-            <option value="Director">Director</option>
+          <option value="Employee">Employee</option>
+          <option value="Manager">Manager</option>
+          <option value="Admin">Admin</option>
+          <option value="Director">Director</option>
         </select>
-        <br>
         <label for="username">Username</label>
-        <input type="text" name="username" id="username" required>
-        <br>
+        <input type="text" name="username" id="username" required />
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <br>
-        <input type="submit" value="Login">
-    </form>
-</body>
+        <input type="password" name="password" id="password" required />
+        <input type="submit" value="Login" />
+      </form>
+    </div>
+  </body>
 </html>

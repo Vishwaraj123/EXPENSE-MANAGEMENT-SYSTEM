@@ -1,223 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manager Dashboard</title>
+  <style>
+    /* Reset some default styles */
+    body,
+    h1,
+    h2,
+    h3,
+    p,
+    table,
+    form {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      background-color: #f4f4f4;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      width: 100%;
+    }
+
+    .vertical_wrap {
+      width: 250px;
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      height: 100%;
+      position: relative;
+    }
+
+    .profile_info {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile_info .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .menu {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      margin-bottom: 15px;
+    }
+
+    .menu li a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .menu li a.active {
+      background-color: #444;
+    }
+
+    .menu li a:hover {
+      background-color: #555;
+    }
+
+    .menu .icon {
+      margin-right: 10px;
+    }
+
+    .menu .text {
+      font-size: 16px;
+    }
+
+    .main_container {
+      flex: 1;
+      background-color: #fff;
+      padding: 20px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .top_bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .hamburger {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+
+    h3 {
+      font-size: 14px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    input[type="submit"],
+    button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover,
+    button:hover {
+      background-color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th,
+    table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #f4f4f4;
+    }
+
+    form select {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    form button {
+      background-color: #28a745;
+    }
+
+    form button:hover {
+      background-color: #218838;
+    }
+
+    .btn.btn-primary {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .btn.btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+      }
+
+      .vertical_wrap {
+        width: 100%;
+        height: auto;
+      }
+
+      .main_container {
+        padding: 10px;
+      }
+
+      .top_bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hamburger {
+        margin-bottom: 10px;
+      }
+
+      .menu li a {
+        font-size: 14px;
+      }
+    }
+
+    /* Style for partial amount input field to fit within the table cell */
+    table input[name="partialAmount"] {
+      width: 80px;
+      padding: 5px;
+      margin-right: 10px;
+    }
+
+    /* Style for the form within the table cell */
+    table td form {
+      display: inline-block;
+      margin: 0;
+    }
+
+    /* Style for the approve button */
+    table td form button {
+      padding: 5px 10px;
+      background-color: #3dab4f;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    /* Style for the reject link */
+    table td a {
+      padding: 5px 10px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 10px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Welcome <%= manager.name %> (Manager)</h1>
-  <h2>Profile</h2>
-  <p>Name: <%= manager.name %></p>
-  <p>Username: <%= manager.username %></p>
-  <p>Designation: Manager</p>
-  <p>Department: <%= manager.department %></p>
+  <div class="wrapper">
+    <div class="vertical_wrap">
+      <div class="profile_info">
+        <div class="title">Manager Profile</div>
+        <p class="profile-info">
+          <%= manager.name %>
+        </p>
+        <p class="profile-info">
+          <%= manager.department %>
+        </p>
+      </div>
+      <ul class="menu">
+        <li><a href="#add-expense-section" class="active"><span class="icon">💰</span><span class="text">Add
+              Expense</span></a></li>
+        <li><a href="#your-expenses-section"><span class="icon">📊</span><span class="text">Your Expenses</span></a>
+        </li>
+        <% if (manager.department==='HR' ) { %>
+          <li><a href="#add-employee-section"><span class="icon">👤</span><span class="text">Add Employee</span></a>
+          </li>
+          <% } %>
+            <li><a href="#employee-expenses-section"><span class="icon">👥</span><span class="text">Employee
+                  Expenses</span></a></li>
+            <% if (manager.department==='Finance' ) { %>
+              <li><a href="#finance-section"><span class="icon">📈</span><span class="text">Expenses to be
+                    Paid</span></a></li>
+              <% } %>
+              <li><a href="/manager/logout"><span class="icon">🚪</span><span class="text">Logout</span></a></li>
+      </ul>
+    </div>
+    <div class="main_container">
+      <br><br>
+      <h1>Manager Dashboard</h1>
+      <br><br>
 
-  <% if (manager.department === 'HR') { %>
-  <h2>Add Employee</h2>
-  <form action="/manager/addEmployee" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" /><br /><br />
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" /><br /><br />
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" /><br /><br />
-    <label for="department">Department:</label>
-    <select id="department" name="department">
-      <option value="HR">HR</option>
-      <option value="Finance">Finance</option>
-      <option value="Marketing">Sales</option>
-      <!-- add more departments as needed -->
-    </select><br /><br />
-    <input type="submit" value="Add Employee" />
-  </form>
-  <% } %>
+      <section id="add-expense-section" class="section active">
+        <h2>Add Expense</h2>
+        <form action="/manager/addExpense" method="POST">
+          <label for="category">Category:</label>
+          <input type="text" id="category" name="category" /><br /><br />
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount" /><br /><br />
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" /><br /><br />
+          <input type="submit" value="Submit" />
+        </form>
+      </section>
 
-  <h2>Add Expense</h2>
-  <form action="/manager/addExpense" method="POST">
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="category" /><br /><br />
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="amount" /><br /><br />
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date" /><br /><br />
-    <input type="submit" value="Submit" />
-  </form>
+      <section id="your-expenses-section" class="section">
+        <h2>Your Expenses</h2>
+        <table id="expenses-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Action by Admin</th>
+              <th>Action by Director</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-list">
+            <!-- expenses will be displayed here -->
+          </tbody>
+        </table>
+      </section>
 
-  <h2>Your Expenses</h2>
-  <table border="1px">
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Action By Admin</th>
-        <th>Action By Director</th>
-      </tr>
-    </thead>
-    <tbody id="expenses-list">
-      <!-- expenses will be displayed here -->
-    </tbody>
-  </table>
+      <section id="add-employee-section" class="section">
+        <h2>Add Employee</h2>
+        <form action="/manager/addEmployee" method="POST">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required /><br /><br />
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required /><br /><br />
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required /><br /><br />
+          <label for="department">Department:</label>
+          <select name="department" id="department" required>
+            <option value="Sales">Sales</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+          </select><br /><br />
+          <input type="submit" value="Add Employee" />
+        </form>
+      </section>
 
-  <h2>Employee Expenses</h2>
-  <table border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Action by Manager</th>
-        <th>Action by Admin</th>
-        <th>Action by Director</th>
-      </tr>
-    </thead>
-    <tbody id="employee-expenses-list"></tbody>
-  </table>
+      <section id="employee-expenses-section" class="section">
+        <h2>Employee Expenses</h2>
+        <table id="employee-expenses-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Action by Manager</th>
+            </tr>
+          </thead>
+          <tbody id="employee-expenses-list">
+            <!-- employee expenses will be displayed here -->
+          </tbody>
+        </table>
+      </section>
 
-  <% if (manager.department === 'Finance') { %>
-  <h2>Employee Expenses to be Paid</h2>
-  <table border="1px">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Designation</th>
-        <th>Department</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Approved Amount</th>
-        <th>Date</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="manager-expenses-list">
-      <!-- expenses will be displayed here -->
-      <% finance.forEach(function(expense) { %>
-        <% if (expense.ActionByDirector != 'Rejected') { %>
-        <% if ((expense.designation === 'Employee' && expense.ActionByManager === 'Approved' && expense.ActionByAdmin === 'Approved') || (expense.designation == 'Employee' && expense.amount >= 100000 && expense.ActionByDirector == 'Approved') || (expense.designation == 'Employee' && expense.amount >= 10000 && expense.ActionByAdmin == 'Approved' ) || (expense.designation === 'Employee' && expense.ActionByManager === 'Partially Approved')) { %>
-          <tr>
-            <td><%= expense.name %></td>
-            <td><%= expense.designation %></td>
-            <td><%= expense.department %></td>
-            <td><%= expense.category %></td>
-            <td><%= expense.amount %></td>
-            <td><%= expense.ApprovedAmount %></td>
-            <td><%= expense.date %></td>
-            <% if (expense.Finance !== 'Pending' && expense.Finance !== undefined) { %>
-              <td><%= expense.Finance %></td>
-            <% } else { %>
-              <td>
-                <form action="/manager/payExpense/<%= expense._id %>" method="post">
-                  <select name="modeOfPayment" id="modeOfPayment">
-                    <option value="cash">Cash</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="bank_transfer">Bank Transfer</option>
-                  </select>
-                  <button type="submit">Pay</button>
-                </form>
-              </td>
-            <% } %>
-          </tr>
-        <% } else if ((expense.designation === 'Manager' && expense.ActionByAdmin === 'Approved') || (expense.designation == 'Manager' && expense.amount >= 100000 && expense.ActionByDirector == 'Approved') || (expense.designation === 'Manager' && expense.ActionByAdmin === 'Partially Approved')) { %>
-          <tr>
-            <td><%= expense.name %></td>
-            <td><%= expense.designation %></td>
-            <td><%= expense.department %></td>
-            <td><%= expense.category %></td>
-            <td><%= expense.amount %></td>
-            <td><%= expense.ApprovedAmount %></td>
-            <td><%= expense.date %></td>
-            <% if (expense.Finance !== 'Pending' && expense.Finance !== undefined) { %>
-              <td><%= expense.Finance %></td>
-            <% } else { %>
-              <td>
-                <form action="/manager/payExpense/<%= expense._id %>" method="post">
-                  <select name="modeOfPayment" id="modeOfPayment">
-                    <option value="cash">Cash</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="bank_transfer">Bank Transfer</option>
-                  </select>
-                  <button type="submit">Pay</button>
-                </form>
-              </td>
-            <% } %>
-          </tr>
-        <% } else if ((expense.designation === 'Admin' && expense.ActionByDirector === 'Approved') || (expense.designation === 'Admin' && expense.ActionByDirector === 'Partially Approved')) { %>
-          <tr>
-            <td><%= expense.name %></td>
-            <td><%= expense.designation %></td>
-            <td><%= expense.department %></td>
-            <td><%= expense.category %></td>
-            <td><%= expense.amount %></td>
-            <td><%= expense.ApprovedAmount %></td>
-            <td><%= expense.date %></td>
-            <% if (expense.Finance !== 'Pending' && expense.Finance !== undefined) { %>
-              <td><%= expense.Finance %></td>
-            <% } else { %>
-              <td>
-                <form action="/manager/payExpense/<%= expense._id %>" method="post">
-                  <select name="modeOfPayment" id="modeOfPayment">
-                    <option value="cash">Cash</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="bank_transfer">Bank Transfer</option>
-                  </select>
-                  <button type="submit">Pay</button>
-                </form>
-              </td>
-            <% } %>
-          </tr>
-        <% } %>
-      <% } %>
-      <% }); %>
-    </tbody>
-    
-  </table>
-  <% } %>
+      <section id="finance-section" class="section">
+        <h2>Expenses to be Paid</h2>
+        <table id="expenses-to-be-paid-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Designation</th>
+              <th>Department</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Approved Amount</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-to-be-paid-list">
+            <% finance.forEach(function(expense) { %>
+              <% if (expense.ActionByDirector !='Rejected' ) { %>
+                <% if ((expense.designation==='Employee' && expense.ActionByManager==='Approved' &&
+                  expense.ActionByAdmin==='Approved' ) || (expense.designation=='Employee' && expense.amount>= 100000 &&
+                  expense.ActionByDirector == 'Approved') ||
+                  (expense.designation == 'Employee' && expense.amount >= 10000
+                  && expense.ActionByAdmin == 'Approved' ) ||
+                  (expense.designation === 'Employee' && expense.ActionByManager
+                  === 'Partially Approved')) { %>
+                  <tr>
+                    <td>
+                      <%= expense.name %>
+                    </td>
+                    <td>
+                      <%= expense.designation %>
+                    </td>
+                    <td>
+                      <%= expense.department %>
+                    </td>
+                    <td>
+                      <%= expense.category %>
+                    </td>
+                    <td>
+                      <%= expense.amount %>
+                    </td>
+                    <td>
+                      <%= expense.ApprovedAmount %>
+                    </td>
+                    <td><%= expense.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                    <% if (expense.Finance !=='Pending' && expense.Finance !==undefined) { %>
+                      <td>
+                        <%= expense.Finance %>
+                      </td>
+                      <% } else { %>
+                        <td>
+                          <form action="/manager/payExpense/<%= expense._id %>" method="post">
+                            <select name="modeOfPayment" id="modeOfPayment">
+                              <option value="cash">Cash</option>
+                              <option value="credit_card">Credit Card</option>
+                              <option value="bank_transfer">Bank Transfer</option>
+                            </select>
+                            <button type="submit">Pay</button>
+                          </form>
+                        </td>
+                        <% } %>
+                  </tr>
+                  <% } else if ((expense.designation==='Manager' && expense.ActionByAdmin==='Approved' ) ||
+                    (expense.designation=='Manager' && expense.amount>= 100000 &&
+                    expense.ActionByDirector == 'Approved') ||
+                    (expense.designation === 'Manager' && expense.ActionByAdmin
+                    === 'Partially Approved')) { %>
+                    <tr>
+                      <td>
+                        <%= expense.name %>
+                      </td>
+                      <td>
+                        <%= expense.designation %>
+                      </td>
+                      <td>
+                        <%= expense.department %>
+                      </td>
+                      <td>
+                        <%= expense.category %>
+                      </td>
+                      <td>
+                        <%= expense.amount %>
+                      </td>
+                      <td>
+                        <%= expense.ApprovedAmount %>
+                      </td>
+                      <td><%= expense.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                      <% if (expense.Finance !=='Pending' && expense.Finance !==undefined) { %>
+                        <td>
+                          <%= expense.Finance %>
+                        </td>
+                        <% } else { %>
+                          <td>
+                            <form action="/manager/payExpense/<%= expense._id %>" method="post">
+                              <select name="modeOfPayment" id="modeOfPayment">
+                                <option value="cash">Cash</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                              </select>
+                              <button type="submit">Pay</button>
+                            </form>
+                          </td>
+                          <% } %>
+                    </tr>
+                    <% } else if ((expense.designation==='Admin' && expense.ActionByDirector==='Approved' ) ||
+                      (expense.designation==='Admin' && expense.ActionByDirector==='Partially Approved' )) { %>
+                      <tr>
+                        <td>
+                          <%= expense.name %>
+                        </td>
+                        <td>
+                          <%= expense.designation %>
+                        </td>
+                        <td>
+                          <%= expense.department %>
+                        </td>
+                        <td>
+                          <%= expense.category %>
+                        </td>
+                        <td>
+                          <%= expense.amount %>
+                        </td>
+                        <td>
+                          <%= expense.ApprovedAmount %>
+                        </td>
+                        <td><%= expense.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                        <% if (expense.Finance !=='Pending' && expense.Finance !==undefined) { %>
+                          <td>
+                            <%= expense.Finance %>
+                          </td>
+                          <% } else { %>
+                            <td>
+                              <form action="/manager/payExpense/<%= expense._id %>" method="post">
+                                <select name="modeOfPayment" id="modeOfPayment">
+                                  <option value="cash">Cash</option>
+                                  <option value="credit_card">Credit Card</option>
+                                  <option value="bank_transfer">Bank Transfer</option>
+                                </select>
+                                <button type="submit">Pay</button>
+                              </form>
+                            </td>
+                            <% } %>
+                      </tr>
+                      <% } %>
+                        <% } %>
+                          <% }); %>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
 
   <script>
     // Make an AJAX request to the displayExpenses route
     fetch("/manager/displayExpense")
-      .then(response => response.json())
-      .then(expenses => {
+      .then((response) => response.json())
+      .then((expenses) => {
         const expensesList = document.getElementById("expenses-list");
-        expenses.forEach(expense => {
+        expenses.forEach((expense) => {
           const tableRow = document.createElement("tr");
           tableRow.innerHTML = `
-            <td>${expense.category}</td>
-            <td>${expense.amount}</td>
-            <td>${expense.date}</td>
-            <td>${expense.ActionByAdmin}</td>
-            <td>${expense.ActionByDirector}</td>
-          `;
+                      <td>${expense.category}</td>
+                      <td>${expense.amount}</td>
+                     <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
+                      <td>${expense.ActionByAdmin}</td>
+                      <td>${expense.ActionByDirector}</td>
+                    `;
           expensesList.appendChild(tableRow);
         });
       })
-      .catch(error => {
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
 
     fetch("/manager/displayEmployeeExpenses")
-      .then(response => response.json())
-      .then(employeeExpenses => {
+      .then((response) => response.json())
+      .then((employeeExpenses) => {
         console.log(employeeExpenses);
-        const expensesList = document.getElementById("employee-expenses-list");
-        employeeExpenses.forEach(expense => {
+        const expensesList = document.getElementById(
+          "employee-expenses-list"
+        );
+        employeeExpenses.forEach((expense) => {
           const tableRow = document.createElement("tr");
           let statusHtml = "";
           if (expense.ActionByManager === "Pending") {
-            if(expense.amount > 10000){
-              statusHtml = `cant Approve`
-            }else{
-            statusHtml = `
+            if (expense.amount > 10000) {
+              statusHtml = `Can't Approve`;
+            } else {
+              statusHtml = `
               <form action="/manager/${expense.id}/approvePartial" method="POST">
                 <label for="amount">Approve Amount</label>
                 <input type="number" name="amount" min="1" max="${expense.amount}" required>
                 <button type="submit">Approve Partially</button>
               </form>
-              <a href="/manager/${expense.id}/approveExpense">Approve</a>
+              <a href="/manager/${expense.id}/approveExpense" style="background-color:#3dab4f; ">Approve</a>
               <a href="/manager/${expense.id}/rejectExpense">Reject</a>
-            `;}
+            `;
+            }
           } else {
             statusHtml = expense.ActionByManager;
           }
@@ -225,19 +593,38 @@
             <td>${expense.employeeName}</td>
             <td>${expense.category}</td>
             <td>${expense.amount}</td>
-            <td>${expense.date}</td>
+            <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
             <td>${statusHtml}</td>
-            <td>${expense.ActionByAdmin}</td>
-            <td>${expense.ActionByDirector}</td>
           `;
           expensesList.appendChild(tableRow);
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
-  </script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const menuLinks = document.querySelectorAll('.menu a');
+      const sections = document.querySelectorAll('.section');
 
-  <a href="/logout">Logout</a>
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+
+          menuLinks.forEach(link => link.classList.remove('active'));
+          this.classList.add('active');
+
+          const target = this.getAttribute('href').substring(1);
+          sections.forEach(section => {
+            section.classList.remove('active');
+            if (section.id === target) {
+              section.classList.add('active');
+            }
+          });
+        });
+      });
+    });
+  </script>
+  
 </body>
+
 </html>

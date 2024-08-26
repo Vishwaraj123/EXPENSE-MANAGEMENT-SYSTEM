@@ -1,227 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <style>
-        body {
-      font-family: sans-serif;
-      background-color: #f5f5f5;
-      max-width: 1000px;
-      margin: auto;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+  /* Reset some default styles */
+  body, h1, h2, h3, p, table, form {
+      margin: 0;
+      padding: 0;
     }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      background-color: #f4f4f4;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      width: 100%;
+    }
+
+    .vertical_wrap {
+      width: 250px;
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      height: 100%;
+      position: relative;
+    }
+
+    .profile_info {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile_info .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .menu {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      margin-bottom: 15px;
+    }
+
+    .menu li a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .menu li a.active {
+      background-color: #444;
+    }
+
+    .menu li a:hover {
+      background-color: #555;
+    }
+
+    .menu .icon {
+      margin-right: 10px;
+    }
+
+    .menu .text {
+      font-size: 16px;
+    }
+
+    .main_container {
+      flex: 1;
+      background-color: #fff;
+      padding: 20px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .top_bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .hamburger {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
     h1, h2, h3 {
       color: #333;
       margin-bottom: 10px;
     }
+
     h1 {
       font-size: 24px;
     }
+
     h2 {
       font-size: 18px;
     }
+
     h3 {
       font-size: 14px;
     }
+
     form {
       margin-bottom: 20px;
     }
+
     label {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
-    input[type="text"], input[type="number"], input[type="date"] {
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
     }
-    input[type="submit"] {
-      background-color: #4CAF50;
+
+    input[type="submit"],
+    button {
+      background-color: #333;
       color: #fff;
-      padding: 10px 20px;
       border: none;
-      border-radius: 5px;
+      padding: 10px 15px;
+      border-radius: 4px;
       cursor: pointer;
     }
-    input[type="submit"]:hover {
-      background-color: #3e8e41;
+
+    input[type="submit"]:hover,
+    button:hover {
+      background-color: #555;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
+      margin-top: 20px;
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
-    .expenses-header {
-      background-color: #333;
-      color: #fff;
+
+    table th,
+    table td {
       padding: 10px;
-      text-align: center;
+      text-align: left;
+      border: 1px solid #ddd;
     }
-    .expenses-list {
-      margin-bottom: 20px;
+
+    table th {
+      background-color: #f4f4f4;
     }
-    </style>
+
+    form select {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    form button {
+      background-color: #28a745;
+    }
+
+    form button:hover {
+      background-color: #218838;
+    }
+
+    .btn.btn-primary {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .btn.btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+      }
+
+      .vertical_wrap {
+        width: 100%;
+        height: auto;
+      }
+
+      .main_container {
+        padding: 10px;
+      }
+
+      .top_bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hamburger {
+        margin-bottom: 10px;
+      }
+
+      .menu li a {
+        font-size: 14px;
+      }
+    }
+    /* Style for partial amount input field to fit within the table cell */
+    table input[name="partialAmount"] {
+        width: 80px; /* Adjust width to fit within the table cell */
+        padding: 5px; /* Add padding for better spacing */
+        margin-right: 10px; /* Space between input and button */
+      }
+
+      /* Style for the form within the table cell */
+      table td form {
+        display: inline-block; /* Ensure the form is inline */
+        margin: 0; /* Remove default margin */
+      }
+
+      /* Style for the approve button */
+      table td form button {
+        padding: 5px 10px; /* Add padding for better spacing */
+        background-color: #3dab4f; /* Blue background color */
+        color: #fff; /* White text color */
+        border: none; /* Remove border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        margin-right: 10px; /* Space between buttons */
+      }
+
+      /* Style for the reject link */
+      table td a {
+        padding: 5px 10px; /* Add padding for better spacing */
+        background-color: #dc3545; /* Red background color */
+        color: #fff; /* White text color */
+        border: none; /* Remove border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        text-decoration: none; /* Remove underline from link */
+        display: inline-block; /* Ensure the link is inline */
+        margin-left: 10px; /* Space between buttons */
+      }
+  </style>
 </head>
-  <body>
-    <h1 class="welcome-header">Welcome <%= admin.name %> (Admin)</h1>
-    <a href="/logout" class="logout-link">Logout</a>
-    <h2 class="dashboard-header">Admin Dashboard</h2>
-    <h3 class="profile-header">Profile</h3>
 
-    <p class="profile-info">Name: <%= admin.name %></p>
-    <p class="profile-info">Username: <%= admin.username %></p>
-    <p class="profile-info">Department: <%= admin.department %></p>
+<body>
+  <div class="wrapper">
+    <div class="vertical_wrap">
+      <div class="profile_info">
+        <div class="title">Admin Profile</div>
+        <p class="profile-info"><%= admin.name %></p>
+        <p class="profile-info"><%= admin.department %></p>
+      </div>
+      <ul class="menu">
+        <li><a href="#add-expense-section" class="active"><span class="icon">💰</span><span class="text">Add Expense</span></a></li>
+        <li><a href="#your-expenses-section"><span class="icon">📊</span><span class="text">Your Expenses</span></a></li>
+        <li><a href="#manager-expenses-section"><span class="icon">📈</span><span class="text">Manager Expenses</span></a></li>
+        <li><a href="#employee-expenses-section"><span class="icon">👥</span><span class="text">Employee Expenses</span></a></li>
+        <li><a href="/logout"><span class="icon">🚪</span><span class="text">Logout</span></a></li>
+      </ul>
+    </div>
+    <div class="main_container">
+      <br><br>
+      <h1>Admin Dashboard</h1>
+      <br><br>
+      <section id="add-expense-section" class="section active">
+        <h3>Add Expense</h3>
+        <form action="/admin/addExpense" method="POST">
+          <label for="category">Category:</label>
+          <input type="text" id="category" name="category"><br><br>
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount"><br><br>
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date"><br><br>
+          <input type="submit" value="Submit">
+        </form>
+      </section>
 
-    <h3 class="add-expense-header">Add Expense</h3>
-    <form action="/admin/addExpense" method="POST">
-        <label for="category" class="form-label">Category:</label>
-        <input type="text" id="category" name="category" class="form-input"><br><br>
-        <label for="amount" class="form-label">Amount:</label>
-        <input type="number" id="amount" name="amount" class="form-input"><br><br>
-        <label for="date" class="form-label">Date:</label>
-        <input type="date" id="date" name="date" class="form-input"><br><br>
-        <input type="submit" value="Submit" class="form-submit">
-    </form>
+      <section id="your-expenses-section" class="section">
+        <h3>Your Expenses</h3>
+        <table id="expenses-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Action by Director</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-list">
+            <!-- expenses will be displayed here -->
+          </tbody>
+        </table>
+      </section>
 
-    <h3 class="expenses-header">Your Expenses</h3>
-    <table id="expenses-table" border="1px" class="expenses-table">
-      <thead>
-        <tr>
-          <th class="table-header">Category</th>
-          <th class="table-header">Amount</th>
-          <th class="table-header">Date</th>
-          <th class="table-header">Action by Director</th>
-        </tr>
-      </thead>
-      <tbody id="expenses-list" class="expenses-list">
-        <!-- expenses will be displayed here -->
-      </tbody>
-    </table>
+      <section id="manager-expenses-section" class="section">
+        <h3>Manager Expenses</h3>
+        <table id="manager-expenses-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Action by Admin</th>
+            </tr>
+          </thead>
+          <tbody id="manager-expenses-list">
+            <!-- expenses will be displayed here -->
+          </tbody>
+        </table>
+      </section>
 
-    <h3 class="expenses-header">Manager Expenses</h3>
-    <table id="manager-expenses-table" border="1px" class="expenses-table">
-      <thead>
-        <tr>
-          <th class="table-header">Name</th>
-          <th class="table-header">Category</th>
-          <th class="table-header">Amount</th>
-          <th class="table-header">Date</th>
-          <th class="table-header">Action by Admin</th>
-        </tr>
-      </thead>
-      <tbody id="manager-expenses-list" class="expenses-list">
-        <!-- expenses will be displayed here -->
-      </tbody>
-    </table>
+      <section id="employee-expenses-section" class="section">
+        <h3>Employee Expenses</h3>
+        <table id="employee-expenses-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Action by Manager</th>
+              <th>Action by Admin</th>
+            </tr>
+          </thead>
+          <tbody id="employee-expenses-list">
+            <!-- expenses will be displayed here -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
 
-    <h3 class="expenses-header">Employee Expenses</h3>
-    <table id="employee-expenses-table" border="1px" class="expenses-table">
-      <thead>
-        <tr>
-          <th class="table-header">Name</th>
-          <th class="table-header">Category</th>
-          <th class="table-header">Amount</th>
-          <th class="table-header">Date</th>
-          <th class="table-header">Action by Manager</th>
-          <th class="table-header">Action by Admin</th>
-        </tr>
-      </thead>
-      <tbody id="employee-expenses-list" class="expenses-list">
-        <!-- expenses will be displayed here -->
-      </tbody>
-    </table>
-    
 
-    <script>
-        fetch('/admin/displayExpense')
-       .then(response => response.json())
-       .then(expenses => {
-          const expensesList = document.getElementById('expenses-list');
-          expenses.forEach(expense => {
-            const tableRow = document.createElement('tr');
-            tableRow.innerHTML = `
+  <script>
+    fetch('/admin/displayExpense')
+      .then(response => response.json())
+      .then(expenses => {
+        const expensesList = document.getElementById('expenses-list');
+        expenses.forEach(expense => {
+          const tableRow = document.createElement('tr');
+          tableRow.innerHTML = `
               <td>${expense.category}</td>
               <td>${expense.amount}</td>
-              <td>${expense.date}</td>
+              <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
               <td>${expense.ActionByDirector}</td>
             `;
-            expensesList.appendChild(tableRow);
-          });
-        })
-       .catch(error => console.error(error));
+          expensesList.appendChild(tableRow);
+        });
+      })
+      .catch(error => console.error(error));
 
-       fetch('/admin/displayManagerExpenses')
-  .then(response => response.json())
-  .then(expenses => {
-    const managerExpensesList = document.getElementById('manager-expenses-list');
-    expenses.forEach(expense => {
-      const tableRow = document.createElement('tr');
-      tableRow.innerHTML = `
-        <td>${expense.employeeName}</td>
-        <td>${expense.category}</td>
-        <td>${expense.amount}</td>
-        <td>${expense.date}</td>
-        ${expense.ActionByAdmin === "Pending" ? 
-          `${expense.amount <= 100000 ? 
-            `<td> <form id="approve-partial-form" action="/admin/${expense.id}/approvePartial" method="POST">
-              <label for="amount">Approve Amount</label>
-              <input type="number" name="amount" min="1" max="${expense.amount}" required>
-              <button type="submit">Approve Partially</button>
-            </form>
-            <a href="/admin/${expense.id}/approveExpense">Approve</a>
-            <a href="/admin/${expense.id}/rejectExpense">Reject</a></td>` 
-            : `<td>You can't approve this expense since its amount is greater than 100000</td>`
-          }` 
-          : `<td>${expense.ActionByAdmin}</td>`
-        }
-      `;
+    fetch('/admin/displayManagerExpenses')
+      .then(response => response.json())
+      .then(expenses => {
+        const managerExpensesList = document.getElementById('manager-expenses-list');
+        expenses.forEach(expense => {
+          const tableRow = document.createElement('tr');
+          tableRow.innerHTML = `
+            <td>${expense.employeeName}</td>
+            <td>${expense.category}</td>
+            <td>${expense.amount}</td>
+            <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
+            ${expense.ActionByAdmin === "Pending" ?
+              `${expense.amount <= 100000 ?
+                `<td>
+                  <form id="approve-partial-form-${expense.id}" action="/admin/${expense.id}/approvePartial" method="POST">
+                    <label for="amount">Approve Amount</label>
+                    <input type="number" name="amount" min="1" max="${expense.amount}" required>
+                    <button type="submit">Approve Partially</button>
+                  </form>
+                  <a href="/admin/${expense.id}/approveExpense" style="background-color: #3dab4f;">Approve</a>
+                  <a href="/admin/${expense.id}/rejectExpense">Reject</a>
+                </td>`
+                : `<td>You can't approve this expense since its amount is greater than 100000</td>`
+              }`
+              : `<td>${expense.ActionByAdmin}</td>`
+            }
+          `;
+          const form = tableRow.querySelector(`#approve-partial-form-${expense.id}`);
+          if (form) {
+            form.addEventListener('submit', (e) => {
+              e.preventDefault();
+              form.submit();
+            });
+          }
+          managerExpensesList.appendChild(tableRow);
+        });
+      })
+      .catch(error => console.error('Error fetching expenses:', error));
 
-      // Add event listener to the form
-      const form = tableRow.querySelector('#approve-partial-form');
-      form.addEventListener('submit', (e) => {
-        e.preventDefault(); // prevent default form submission
-        // You can add additional logic here if needed
-        form.submit(); // submit the form programmatically
-      });
-
-      managerExpensesList.appendChild(tableRow);
-    });
-  })
-  .catch(error => console.error(error));
-        fetch('/admin/displayEmployeeExpenses')
-       .then(response => response.json())
-       .then(expenses => {
-          const employeeExpensesList = document.getElementById('employee-expenses-list');
-          expenses.forEach(expense => {
-            const tableRow = document.createElement('tr');
-            tableRow.innerHTML = `
+    fetch('/admin/displayEmployeeExpenses')
+      .then(response => response.json())
+      .then(expenses => {
+        const employeeExpensesList = document.getElementById('employee-expenses-list');
+        expenses.forEach(expense => {
+          const tableRow = document.createElement('tr');
+          tableRow.innerHTML = `
               <td>${expense.employeeName}</td>
               <td>${expense.category}</td>
               <td>${expense.amount}</td>
-              <td>${expense.date}</td>
+              <td>${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(expense.date))}</td>
               <td>${expense.ActionByManager}</td>
-              ${expense.ActionByAdmin === "Pending" ? 
-                `${expense.amount > 100000 ? 
+              ${expense.ActionByAdmin === "Pending" ?
+                `${expense.amount > 100000 ?
                   `<td>You can't approve this expense since its amount is greater than 100000</td>`
-                  : `<td><a href=${`/admin/${expense.id}/approveExpense`}>Approve</a>
-                  <a href=${`/admin/${expense.id}/rejectExpense`}>Reject</a></td>`}`
+                  : `<td><a href=${`/admin/${expense.id}/approveExpense`} style="background-color: #3dab4f;">Approve</a>
+                    <a href=${`/admin/${expense.id}/rejectExpense`}>Reject</a></td>`
+                }`
                 : `<td>${expense.ActionByAdmin}</td>`
               }
             `;
-            employeeExpensesList.appendChild(tableRow);
-          });
-        })
-       .catch(error => console.error(error));
-    </script>
+          employeeExpensesList.appendChild(tableRow);
+        });
+      })
+      .catch(error => console.error(error));
+
+      document.querySelectorAll(".menu li a").forEach(link => {
+        link.addEventListener("click", function () {
+          document.querySelectorAll(".section").forEach(section => section.classList.remove("active"));
+          document.querySelector(`#${this.getAttribute('href').substring(1)}`).classList.add("active");
+          document.querySelectorAll(".menu li a").forEach(a => a.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+  </script>
 </body>
+
 </html>

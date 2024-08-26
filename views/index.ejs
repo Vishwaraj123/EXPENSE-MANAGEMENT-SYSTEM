@@ -3,10 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page </title>
+    <title>Employee Expense Management System (EEMS)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            top: 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+            color: white;
+        }
+        .section {
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .home {
+            background-image: url('login_background.jpeg');
+            background-size: cover;
+            color: white;
+        }
+        .about, .features, .contact {
+            background-color: white;
+        }
+        .content {
+            max-width: 800px;
+            margin: auto;
+        }
+        .features ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .features li {
+            background-color: #e2f5fe;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .features li h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .features li p {
+            margin: 5px 0 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Home Page</h1>
-    <a href="/login.html">Login</a>
+
+    <div class="navbar">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <div id="home" class="section home">
+        <div class="content">
+            <h1>Welcome to Employee Expense Management System (EEMS)</h1>
+            <p>Your comprehensive solution for efficient expense management.</p>
+        </div>
+    </div>
+
+    <div id="about" class="section about">
+        <div class="content">
+            <h2>About EEMS</h2>
+            <p>
+                The Employee Expense Management System (EEMS) is designed to streamline and automate the expense reporting, approval, and payment processes within an organization. By providing a user-friendly platform, EEMS enhances financial control, accountability, and operational efficiency. With EEMS, employees can easily submit their expenses, managers can approve them with a single click, and the finance team can track and manage payments seamlessly.
+            </p>
+        </div>
+    </div>
+
+    <div id="features" class="section features">
+        <div class="content">
+            <h2>Features of EEMS</h2>
+            <ul>
+                <li>
+                    <h3>User-Friendly Interface</h3>
+                    <p>EEMS boasts an intuitive and user-friendly interface, making it easy for employees, managers, and finance teams to navigate and use the system efficiently.</p>
+                </li>
+                <li>
+                    <h3>Automated Expense Submission</h3>
+                    <p>Employees can submit their expenses through a simple form, reducing paperwork and manual entry errors.</p>
+                </li>
+                <li>
+                    <h3>Multi-Tier Approval Workflow</h3>
+                    <p>EEMS supports a multi-tier approval workflow, ensuring that expenses are reviewed and approved by the appropriate personnel at each level.</p>
+                </li>
+                <li>
+                    <h3>Real-Time Status Tracking</h3>
+                    <p>Users can track the status of their submitted expenses in real-time, providing transparency and reducing follow-up queries.</p>
+                </li>
+                <li>
+                    <h3>Expense Categorization and Prioritization</h3>
+                    <p>Expenses can be categorized and prioritized based on their type and urgency, helping manage budgets effectively.</p>
+                </li>
+                <li>
+                    <h3>User Role Management</h3>
+                    <p>Administrators can assign roles to users, granting different levels of access and functionality based on their responsibilities.</p>
+                </li>
+                <li>
+                    <h3>Payment Processing Integration</h3>
+                    <p>EEMS integrates with payment processing systems to facilitate quick and secure reimbursements.</p>
+                </li>
+                <li>
+                    <h3>Detailed Financial Reporting</h3>
+                    <p>Generate detailed financial reports to analyze expenses, track spending patterns, and make informed budget decisions.</p>
+                </li>
+                <li>
+                    <h3>Secure Authentication and Authorization</h3>
+                    <p>Ensure data security with robust authentication and authorization mechanisms.</p>
+                </li>
+                <li>
+                    <h3>Audit Trail</h3>
+                    <p>Maintain an audit trail of all transactions and activities within the system for compliance and accountability.</p>
+                </li>
+                <li>
+                    <h3>Cross-Platform Accessibility</h3>
+                    <p>EEMS is accessible from any device with an internet connection, ensuring that users can manage their expenses on the go.</p>
+                </li>
+                <li>
+                    <h3>Scalability</h3>
+                    <p>Scalable to accommodate growing organizations and increasing volumes of expense reports.</p>
+                </li>
+                <li>
+                    <h3>System Integration</h3>
+                    <p>Integrates with existing HR and financial systems for seamless data exchange and management.</p>
+                </li>
+                <li>
+                    <h3>Responsive Design</h3>
+                    <p>Designed to be accessible across various devices, ensuring a consistent user experience on desktops, tablets, and smartphones.</p>
+                </li>
+                <li>
+                    <h3>Regular Updates and Maintenance</h3>
+                    <p>Receive regular updates and maintenance to ensure the system remains up-to-date with the latest features and security enhancements.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="contact" class="section contact">
+        <div class="content">
+            <h2>Contact Us</h2>
+            <p>
+                For more information about the Employee Expense Management System (EEMS), please contact us at:
+            </p>
+            <p>Email: info@eems.com</p>
+            <p>Phone: +1 (123) 456-7890</p>
+        </div>
+    </div>
+
 </body>
 </html>

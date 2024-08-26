@@ -112,10 +112,10 @@ async function createManager(req, res) {
             designation: "Manager"
         });
         await newManager.save();
-        return res.send("Manager created successfully.");
+        return res.send(`<script>alert('Manager created successfully.'); window.history.go(-1);</script>`);
     } catch (err) {
         console.log(err);
-        return res.send("Internal server error.");
+        return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
 }
 
@@ -125,7 +125,7 @@ async function createAdmin(req, res) {
         
         const existingAdmin = await Admin.findOne({ username: username });
         if (existingAdmin) {
-            return res.send("Username already exists.");
+            return res.send(`<script>alert('Username already exists.'); window.history.go(-1);</script>`);
         }
         const newAdmin = new Admin({
             name: name,
@@ -135,10 +135,10 @@ async function createAdmin(req, res) {
             designation: "Admin"
         });
         await newAdmin.save();
-        return res.send("Admin created successfully.");
+return res.send(`<script>alert('Admin created successfully.'); window.history.go(-1);</script>`);
     } catch (err) {
         console.log(err);
-        return res.send("Internal server error.");
+        return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
 }
 
@@ -146,7 +146,8 @@ async function deleteUser(req, res) {
     try {
         const userId = req.params.id;
         const userType = req.params.type; // Get the type of user (Employee, Manager, or Admin)
-        console.log(userType)
+   
+        
 
         let user;
         switch (userType) {
@@ -160,16 +161,16 @@ async function deleteUser(req, res) {
                 user = await Admin.findByIdAndDelete(userId);
                 break;
             default:
-                return res.send("Invalid user type.");
+                return res.send(`<script>alert('Invalid user type.'); window.history.go(-1);</script>`);
         }
 
         if (!user) {
-            return res.send("User not found.");
+            return res.send(`<script>alert('User not found.'); window.history.go(-1);</script>`);
         }
-        return res.send("User deleted successfully.");
+        return res.send(`<script>alert('User deleted successfully.'); window.history.go(-1);</script>`);
     } catch (err) {
         console.log(err);
-        return res.send("Internal server error.");
+        return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
 }
 
@@ -190,11 +191,11 @@ async function editUser(req, res) {
         user = await Admin.findById(id);
         break;
       default:
-        return res.send("Invalid user type.");
+        return res.send(`<script>alert('Invalid user type.'); window.history.go(-1);</script>`);
     }
 
     if (!user) {
-      return res.send("User not found.");
+return res.send(`<script>alert('User not found.'); window.history.go(-1);</script>`);
     }
 
     user.name = name;
@@ -203,10 +204,10 @@ async function editUser(req, res) {
 
     await user.save();
 
-    return res.send("User details updated successfully.");
+    return res.send(`<script>alert('User details updated successfully.'); window.history.go(-1);</script>`);
   } catch (err) {
     console.log(err);
-    return res.send("Internal server error.");
+    return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
   }
 }
 
@@ -226,7 +227,7 @@ async function getEditUser(req, res) {
                 user = await Admin.findById(id);
                 break;
             default:
-                return res.send("Invalid user type.");
+                return res.send(`<script>alert('Invalid user type.'); window.history.go(-1);</script>`);
         }
 
         if (!user) {
@@ -236,7 +237,7 @@ async function getEditUser(req, res) {
         return res.render("editUser", { user });
     } catch (err) {
         console.log(err);
-        return res.send("Internal server error.");
+        return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
 }
 async function approveExpense(req, res) {
@@ -245,8 +246,7 @@ async function approveExpense(req, res) {
     const { partialAmount } = req.body;
 
     if (partialAmount == null || partialAmount == undefined) {
-      // Log the ID for debugging purposes
-      console.log('ID received:', id);
+   
 
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -289,8 +289,6 @@ async function approveExpense(req, res) {
     try {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
   
-      // Log the ID for debugging purposes
-      console.log('ID received:', id);
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -317,8 +315,7 @@ async function approveExpense(req, res) {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
       const { partialAmount } = req.body; // Assuming you're getting the amount from the request body
   
-      // Log the ID for debugging purposes
-      console.log('ID received:', id, 'Amount received:', amount);
+
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {

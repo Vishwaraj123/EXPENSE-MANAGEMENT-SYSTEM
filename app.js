@@ -30,11 +30,11 @@ app.use(
     })
 );
 
-app.get("/", (req, res) => {
-    res.render("index");
-});
+// app.get("/", (req, res) => {
+//     res.render("index");
+// });
 
-app.get("/login.html", (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views/login.html"));
 });
 
@@ -46,6 +46,6 @@ app.use('/manager', managerRoutes);
 app.use('/admin', adminRoutes);
 app.use('/director', directorRoutes);
 
-app.listen(7000, () => {
-    console.log("Server started on http://localhost:7000");
+app.listen(5000, () => {
+    console.log("Server started on http://localhost:5000");
 });

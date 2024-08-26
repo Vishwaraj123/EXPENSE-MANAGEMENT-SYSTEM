@@ -7,17 +7,17 @@ const ObjectId = mongoose.Types.ObjectId;
 
 async function addExpense(req, res) {
     if (!req.body) {
-      return res.send("Request body is empty.");
+      return res.send(`<script>alert('Request body is empty.'); window.history.go(-1);</script>`);
     }
   
     const { category, amount, date } = req.body;
     const userId = req.session.loggedInUserId;
-    console.log(userId)
+    // console.log(userId)
   
     try {
       const user = await Admin.findById(userId);
       if (!user) {
-        return res.send("User not found.");
+        return res.send(`<script>alert('User not found.'); window.history.go(-1);</script>`);
       }
   
       const newExpense = new Expense({
@@ -33,10 +33,10 @@ async function addExpense(req, res) {
   
       await newExpense.save();
   
-      return res.send("Expense added successfully.");
+      return res.send(`<script>alert('Expense added successfully.'); window.history.go(-1);</script>`);
     } catch (err) {
       console.log(err);
-      return res.send("Internal server error.");
+      return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
   }
 
@@ -47,13 +47,13 @@ async function addExpense(req, res) {
       const expenses = await Expense.find({ userId: userId });
   
       if (expenses.length === 0) {
-        return res.send("No expenses found for this user.");
+        return res.send(`<script>alert('No expenses found for this user.'); window.history.go(-1);</script>`);
       }
   
       res.json(expenses);
     } catch (err) {
       console.log(err);
-      return res.send("Internal server error.");
+      return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
   }
 
@@ -79,11 +79,11 @@ async function addExpense(req, res) {
           });
         });
       }
-      // console.log(employeeExpenses)
+      console.log(employeeExpenses)
       return res.json(employeeExpenses);
     } catch (err) {
       console.log(err);
-      res.send("Internal server error.");
+      res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
   }
 
@@ -109,20 +109,16 @@ async function addExpense(req, res) {
           });
         });
       }
-    //   console.log(employeeExpenses)
       return res.json(employeeExpenses);
     } catch (err) {
       console.log(err);
-      res.send("Internal server error.");
+      res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
     
   }
   async function approveExpense(req, res) {
     try {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
-  
-      // Log the ID for debugging purposes
-      console.log('ID received:', id);
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -131,12 +127,19 @@ async function addExpense(req, res) {
   
       const expenseId = new ObjectId(id);
   
-      // Find and update the expense
-      const expense = await Expense.findByIdAndUpdate(expenseId, { $set: { ActionByAdmin: 'Approved', ApprovedAmount: expense.amount } }, { new: true });
-  
+      // Find the expense by ID first
+      const expense = await Expense.findById(expenseId);
+      
       if (!expense) {
         return res.status(404).json({ error: 'Expense not found' });
       }
+  
+      // Update the expense
+      const updatedExpense = await Expense.findByIdAndUpdate(
+        expenseId,
+        { $set: { ActionByAdmin: 'Approved', ApprovedAmount: expense.amount } },
+        { new: true }
+      );
   
       res.send(`<script>alert('Expense approved.'); window.history.go(-1);</script>`);
     } catch (error) {
@@ -144,13 +147,10 @@ async function addExpense(req, res) {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
-
+  
   async function rejectExpense(req, res) {
     try {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
-  
-      // Log the ID for debugging purposes
-      console.log('ID received:', id);
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -176,9 +176,7 @@ async function addExpense(req, res) {
     try {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
       const { amount } = req.body; // Assuming you're getting the amount from the request body
-  
-      // Log the ID for debugging purposes
-      console.log('ID received:', id, 'Amount received:', amount);
+
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {

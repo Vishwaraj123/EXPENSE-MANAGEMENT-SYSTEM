@@ -15,7 +15,7 @@ const ObjectId = mongoose.Types.ObjectId;
 async function addEmployee(req, res) {
     // Check if request body is empty
     if (!req.body) {
-        return res.send("Request body is empty.");
+        res.send(`<script>alert('Request body is empty.'); window.history.go(-1);</script>`);
     }
 
     // Extract employee data from request body
@@ -36,6 +36,7 @@ async function addEmployee(req, res) {
             name: name,
             username: username,
             password: password,
+            designation: "Employee",
             department: department,
         });
 
@@ -52,12 +53,12 @@ async function addEmployee(req, res) {
 }
 async function addExpense(req, res) {
     if (!req.body) {
-      return res.send("Request body is empty.");
+      return res.send(`<script>alert('Request body is empty.'); window.history.go(-1);</script>`);
     }
   
     const { category, amount, date } = req.body;
     const userId = req.session.loggedInUserId;
-    console.log(userId)
+
   
     try {
       const user = await Manager.findById(userId);
@@ -127,7 +128,7 @@ async function addExpense(req, res) {
           });
         });
       }
-      // console.log(employeeExpenses)
+  
       return res.json(employeeExpenses);
     } catch (err) {
       console.log(err);
@@ -139,8 +140,6 @@ async function addExpense(req, res) {
     try {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
   
-      // Log the ID for debugging purposes
-      console.log('ID received:', id);
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -150,9 +149,13 @@ async function addExpense(req, res) {
       const expenseId = new ObjectId(id);
   
       // Find and update the expense
-      const expense = await Expense.findByIdAndUpdate(expenseId, { $set: { ActionByManager: 'Approved', ApprovedAmount: expense.amount } }, { new: true });
-  
+      const expense = await Expense.findById(expenseId);
       if (!expense) {
+        return res.status(404).json({ error: 'Expense not found' });
+      }
+      const updatedExpense = await Expense.findByIdAndUpdate(expenseId, { $set: { ActionByManager: 'Approved', ApprovedAmount: expense.amount } }, { new: true });
+  
+      if (!updatedExpense) {
         return res.status(404).json({ error: 'Expense not found' });
       }
   
@@ -166,9 +169,7 @@ async function addExpense(req, res) {
   async function rejectExpense(req, res) {
     try {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
-  
-      // Log the ID for debugging purposes
-      console.log('ID received:', id);
+ 
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -196,8 +197,6 @@ async function addExpense(req, res) {
       const { id } = req.params; // Assuming you're getting the ID from the request parameters
       const { amount } = req.body; // Assuming you're getting the amount from the request body
   
-      // Log the ID for debugging purposes
-      console.log('ID received:', id, 'Amount received:', amount);
   
       // Validate the ID before using it
       if (!id || !ObjectId.isValid(id)) {
@@ -223,7 +222,6 @@ async function addExpense(req, res) {
   async function finance(req, res) {
     try {
       const expenses = await Expense.find({});
-      console.log(expenses)
       return expenses;
     } catch (error) {
       console.error('Error fetching expenses:', error);
@@ -235,13 +233,11 @@ async function addExpense(req, res) {
     try {
       const expenseId = req.params.id;
       const {modeOfPayment} = req.body;
-      console.log(modeOfPayment)
       const expense = await Expense.findById(expenseId);
       if (!expense) {
         return res.status(404).json({ error: "Expense not found" });
       }
       expense.Finance = modeOfPayment;
-      // console.log(expense.Finance)
       await expense.save();
       return res.json({ message: "Expense paid successfully" });
     } catch (error) {

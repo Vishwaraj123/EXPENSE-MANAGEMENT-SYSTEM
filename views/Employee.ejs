@@ -1,69 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Dashboard</title>
+  <style>
+    /* Reset some default styles */
+    body,
+    h1,
+    h2,
+    h3,
+    p,
+    table,
+    form {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      background-color: #f4f4f4;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      display: flex;
+      width: 100%;
+    }
+
+    .vertical_wrap {
+      width: 250px;
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      height: 100%;
+      position: relative;
+    }
+
+    .profile_info {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile_info .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .menu {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      margin-bottom: 15px;
+    }
+
+    .menu li a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .menu li a.active {
+      background-color: #444;
+    }
+
+    .menu li a:hover {
+      background-color: #555;
+    }
+
+    .menu .icon {
+      margin-right: 10px;
+    }
+
+    .menu .text {
+      font-size: 16px;
+    }
+
+    .main_container {
+      flex: 1;
+      background-color: #fff;
+      padding: 20px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .top_bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .hamburger {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+
+    h3 {
+      font-size: 14px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    input[type="submit"],
+    button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover,
+    button:hover {
+      background-color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th,
+    table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #f4f4f4;
+    }
+
+    form select {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    form button {
+      background-color: #28a745;
+    }
+
+    form button:hover {
+      background-color: #218838;
+    }
+
+    .btn.btn-primary {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .btn.btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+      }
+
+      .vertical_wrap {
+        width: 100%;
+        height: auto;
+      }
+
+      .main_container {
+        padding: 10px;
+      }
+
+      .top_bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hamburger {
+        margin-bottom: 10px;
+      }
+
+      .menu li a {
+        font-size: 14px;
+      }
+    }
+
+    /* Style for partial amount input field to fit within the table cell */
+    table input[name="partialAmount"] {
+      width: 80px;
+      padding: 5px;
+      margin-right: 10px;
+    }
+
+    /* Style for the form within the table cell */
+    table td form {
+      display: inline-block;
+      margin: 0;
+    }
+
+    /* Style for the approve button */
+    table td form button {
+      padding: 5px 10px;
+      background-color: #3dab4f;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    /* Style for the reject link */
+    table td a {
+      padding: 5px 10px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 10px;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Welcome <%= employee.name %> (Employee)</h1>
-    <h2>Profile</h2>
+  <div class="wrapper">
+    <div class="vertical_wrap">
+      <div class="profile_info">
+        <div class="title">Employee Profile</div>
+        <p class="profile-info">
+          <%= employee.name %>
+        </p>
+        <p class="profile-info">
+          <%= employee.department %>
+        </p>
+      </div>
+      <ul class="menu">
+        <li><a href="#add-expense-section" class="active"><span class="icon">💰</span><span class="text">Add
+              Expense</span></a></li>
+        <li><a href="#your-expenses-section"><span class="icon">📊</span><span class="text">Your Expenses</span></a>
+        </li>
+        <li><a href="/logout"><span class="icon">🚪</span><span class="text">Logout</span></a></li>
+      </ul>
+    </div>
+    <div class="main_container">
+      
+      <br><br>
+      <h1>Employee Dashboard</h1>
+      <br><br>
 
-    <p>Name: <%= employee.name %></p>
-    <p>Username: <%= employee.username %></p>
-    <p>Designation: Employee </p>
-    <p>Department: <%= employee.department %></p>
-    
-    <h2>Add Expense</h2>
-    <form action="/employee/addExpense" method="POST">
-        <label for="category">Category:</label>
-        <input type="text" id="category" name="category"><br><br>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount"><br><br>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date"><br><br>
-        <input type="submit" value="Submit">
-    </form>
+      <section id="add-expense-section" class="section active">
+        <h2>Add Expense</h2>
+        <form action="/employee/addExpense" method="POST">
+          <label for="category">Category:</label>
+          <input type="text" id="category" name="category" /><br /><br />
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount" /><br /><br />
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" /><br /><br />
+          <input type="submit" value="Submit" />
+        </form>
+      </section>
 
-    <h2>Expenses for <%= employee.name %></h2>
-    <table id="expenses-table" border="1px">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Action by Manager</th>
-          <th>Action by Admin</th>
-          <th>Action by Director</th>
-        </tr>
-      </thead>
-      <tbody id="expenses-list">
-        <!-- expenses will be displayed here -->
-      </tbody>
-    </table>
+      <section id="your-expenses-section" class="section">
+        <h2>Your Expenses</h2>
+        <table id="expenses-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Action By Manager</th>
+              <th>Action by Admin</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-list">
+            <!-- expenses will be displayed here -->
+          </tbody>
+        </table>
+      </section>
 
-    <a href="/logout">Logout</a>
+    </div>
 
     <script>
+      document.querySelectorAll(".menu li a").forEach((link) => {
+        link.addEventListener("click", function () {
+          document
+            .querySelectorAll(".section")
+            .forEach((section) => section.classList.remove("active"));
+          document
+            .querySelector(`#${this.getAttribute("href").substring(1)}`)
+            .classList.add("active");
+          document
+            .querySelectorAll(".menu li a")
+            .forEach((a) => a.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
       // Make an AJAX request to the displayExpenses route
-      fetch('/employee/displayExpense')
-       .then(response => response.json())
-       .then(expenses => {
-          const expensesList = document.getElementById('expenses-list');
-          expenses.forEach(expense => {
-            const tableRow = document.createElement('tr');
+      fetch("/employee/displayExpense")
+        .then((response) => response.json())
+        .then((expenses) => {
+          const expensesList = document.getElementById("expenses-list");
+          expenses.forEach((expense) => {
+            const tableRow = document.createElement("tr");
             tableRow.innerHTML = `
               <td>${expense.category}</td>
               <td>${expense.amount}</td>
               <td>${expense.date}</td>
               <td>${expense.ActionByManager}</td>
               <td>${expense.ActionByAdmin}</td>
-              <td>${expense.ActionByDirector}</td>
             `;
             expensesList.appendChild(tableRow);
           });
         })
-       .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     </script>
 </body>
+
 </html>

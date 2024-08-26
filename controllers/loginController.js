@@ -6,7 +6,7 @@ const { finance } = require('./managerController');
 
 async function login(req, res) {
     if (!req.body) {
-        return res.send("Request body is empty.")
+        return res.send(`<script>alert('Request body is empty.'); window.history.go(-1);</script>`);
     }
     const { designation, username, password } = req.body;
     let loggedInUserId;
@@ -14,17 +14,17 @@ async function login(req, res) {
     try {
         const User = getDesignation(designation);
         if (!User) {
-            return res.send("Invalid role.");
+            return res.send(`<script>alert('Invalid role.'); window.history.go(-1);</script>`);
         }
 
         const user = await User.findOne({ username });
 
         if (!user) {
-            return res.send("User not found.");
+            return res.send(`<script>alert('User not found.'); window.history.go(-1);</script>`);
         }
 
         if (user.password !== password) {
-            return res.send("Incorrect password.");
+            return res.send(`<script>alert('Incorrect password.'); window.history.go(-1);</script>`);
         }
 
         const financeData = await finance(); // Rename variable to avoid conflict
@@ -47,11 +47,11 @@ async function login(req, res) {
                 const director = user;
                 return res.render("Director", { director, loggedInUserId });
             default:
-                return res.send("Invalid designation.");
+                return res.send(`<script>alert('Invalid designation.'); window.history.go(-1);</script>`);
         }
     } catch (err) {
         console.log(err);
-        return res.send("Internal server error.");
+        return res.send(`<script>alert('Internal server error.'); window.history.go(-1);</script>`);
     }
 }
 
@@ -72,7 +72,7 @@ function getDesignation(designation) {
 
 function logout(req, res) {
     req.session.destroy();
-    res.redirect("/login.html");
+    res.redirect("/");
 }
 
 module.exports = { login, logout };
