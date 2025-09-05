@@ -408,7 +408,7 @@
           <tbody id="expenses-to-be-paid-list">
             <% finance.forEach(function(expense) { %>
               <% if (expense.ActionByDirector !='Rejected' ) { %>
-                <% if ((expense.designation==='Employee' && expense.ActionByManager==='Approved' &&
+                <% if ((expense.ActionByDirector =='Approved')||(expense.designation==='Employee' && expense.ActionByManager==='Approved' &&
                   expense.ActionByAdmin==='Approved' ) || (expense.designation=='Employee' && expense.amount>= 100000 &&
                   expense.ActionByDirector == 'Approved') ||
                   (expense.designation == 'Employee' && expense.amount >= 10000

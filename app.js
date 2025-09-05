@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -14,7 +15,7 @@ const directorRoutes = require("./routes/directorRoutes");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-mongoose.connect("mongodb://localhost:27017/Expense", {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });

@@ -239,7 +239,7 @@ async function addExpense(req, res) {
       }
       expense.Finance = modeOfPayment;
       await expense.save();
-      return res.json({ message: "Expense paid successfully" });
+      return res.send("<script>alert('Expense paid successfully'); window.history.go(-1);</script>");
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Error paying expense" });
